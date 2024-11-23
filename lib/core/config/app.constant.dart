@@ -1,0 +1,54 @@
+const String apiBaseUrl = "https://app102024.browsestations.com";
+const String apiUrl = "$apiBaseUrl/api";
+
+// endpoint
+
+const String signUpPath = '/signup';
+const String loginPath = '/login';
+const String loginVerify = '/verifypassword';
+const String confirmOtp = '/confirmotp';
+const String resendOtp = '/resendotp';
+const String sendSms = '/sendcode';
+const String sendOtp = '/sendotp';
+const String resetPassword = '/resetpassword';
+const String setPin = '/setpin';
+const String verifyPin = '/verifypassword';
+const String validatePin = '/verifypin';
+const String getDataPlan = '/services/network-avaliability';
+const String buyData = '/services/data-app';
+const String buyAirtime = '/services/airtime';
+// const String buyAirtime = '/airtime-test';
+const String upgradeToAgent = '/upgradetoagent';
+const String manualFunding = '/manualfunding';
+const String couponFunding = '/couponfunding';
+const String profileUpdate = '/profileupdate';
+const String changePin = '/changepin';
+const String changePassword = '/changepassword';
+const String verifyMeter = '/services/verify-meter';
+const String verifyBetting = '/services/verify-betting';
+const String verifyCable = '/services/verify-cable';
+const String verifyAccount = '/services/verify-account';
+const String getElectricityDisco = '/services/get-electricity-disco';
+const String getBetting = '/services/get-betting';
+const String getEpin = '/services/get-epins';
+const String buyEpin = '/services/epins-app';
+const String getAirtimeNetwork = '/get-network';
+const String getDataAvailability = '/network-avaliability';
+const String verifyNetwork = '/verify-network';
+const String postBetting = '/services/betting';
+const String postElectricity = '/services/electricity';
+const String postCable = '/services/cable-app';
+const String postWithdraw = '/services/withdrawal';
+const String postPortraitcut = '/services/portraitcuts';
+const String generatemonnify = '/generatemonnify';
+const String generatepsb = '/generatepsb';
+const String getBankList = '/services/get-banks';
+const String getPortraitcuts = '/services/get-portraitcuts';
+const String getCableVariation = '/services/get-cable-variation-id';
+const String getCable = '/get-cable';
+
+const String transactionPath = '/getusertransactions';
+const String transactionPath2 = '/getusertransactionslimit';
+const String singleTransactionPath = '/getusertransaction';
+const String getUserDetails = '/getuserdetails';
+const String storeDeviceToken = '/createappid';
