@@ -10,11 +10,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:local_auth_android/local_auth_android.dart';
 import 'package:local_auth_darwin/local_auth_darwin.dart';
 import 'package:remixicon/remixicon.dart';
+import 'package:toastification/toastification.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
 
@@ -92,17 +94,63 @@ class LoginVerify extends HookWidget {
               .add(AddAccountEvent(accounts: state.accounts));
 
           context.go('/user');
+          showToast(
+            context,
+            title: "Login Info",
+            desc: "Login Successful",
+            type: ToastificationType.success,
+          );
         }
       },
       builder: (context, state) {
         return Scaffold(
           appBar: AppHeader(
             title: 'Unique Pin',
-            // onpress: () {
-            //   var appBox = Hive.box("appBox");
-            //   appBox.clear();
-            //   context.go("/login");
-            // },
+            onpress: () {
+              // var appBox = Hive.box("appBox");
+              // appBox.clear();
+              // context.go("/login");
+              showAppDialog(
+                context,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18.0,
+                    vertical: 10,
+                  ),
+                  child: Column(
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Spacer(),
+                      const Text(
+                        "Are you sure you want to proceed ?\nBy continue you will be logout from the app",
+                        textAlign: TextAlign.center,
+                      ),
+                      const Spacer(),
+                      Row(
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              var appBox = Hive.box("appBox");
+                              appBox.clear();
+                              context.go("/");
+                            },
+                            child: const Text("Yes Continue"),
+                          ),
+                          const Spacer(),
+                          TextButton(
+                            onPressed: () {
+                              context.pop();
+                            },
+                            child: const Text("Cancel"),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
           ),
           body: Padding(
             padding: const EdgeInsets.all(15.0),
@@ -217,7 +265,7 @@ class LoginVerify extends HookWidget {
                     // postKeyPress: (key) =>
                     //     pinController.text = "${pinController.text}${key.text}",
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Button(
                     text: "Continue",
                     press: enableButton.value

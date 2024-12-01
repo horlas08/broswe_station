@@ -9,6 +9,8 @@ import 'package:browse_station/screen/user/bills/betting/betting.dart';
 import 'package:browse_station/screen/user/bills/cable/cable.dart';
 import 'package:browse_station/screen/user/bills/education/education.dart';
 import 'package:browse_station/screen/user/bills/electricity/electricity.dart';
+import 'package:browse_station/screen/user/bills/esim/esim.dart';
+import 'package:browse_station/screen/user/bills/giftcard/gift_card.dart';
 import 'package:browse_station/screen/user/bills/status/sucessful/successful.dart';
 import 'package:browse_station/screen/user/confirm_page/confirm_transaction.dart';
 import 'package:browse_station/screen/user/deposit/account_details.dart';
@@ -90,13 +92,6 @@ class AppRouter {
             },
           ),
           GoRoute(
-            path: "regSuccessful",
-            name: "regSuccessful",
-            builder: (context, state) {
-              return const RegistrationSuccessful();
-            },
-          ),
-          GoRoute(
             path: "forgetPassword/:email",
             name: "forgetPassword",
             builder: (context, state) {
@@ -130,7 +125,6 @@ class AppRouter {
             }
             return '/login/verify';
           }
-
           return null;
         },
       ),
@@ -182,6 +176,13 @@ class AppRouter {
             return "/create/pin";
           }
           return null;
+        },
+      ),
+      GoRoute(
+        path: "/regSuccessful",
+        name: "regSuccessful",
+        builder: (context, state) {
+          return const RegistrationSuccessful();
         },
       ),
       GoRoute(
@@ -351,7 +352,27 @@ class AppRouter {
         path: "/deposit",
         name: "deposit",
         builder: (context, state) {
-          return Deposit();
+          return const Deposit();
+        },
+        redirect: (context, state) async {
+          return null;
+        },
+      ),
+      GoRoute(
+        path: "/gift-card",
+        name: "giftCard",
+        builder: (context, state) {
+          return const GiftCard();
+        },
+        redirect: (context, state) async {
+          return null;
+        },
+      ),
+      GoRoute(
+        path: "/esim",
+        name: "esim",
+        builder: (context, state) {
+          return const Esim();
         },
         redirect: (context, state) async {
           return null;
@@ -373,7 +394,7 @@ class AppRouter {
         path: "/user/kyc",
         name: "kyc",
         builder: (context, state) {
-          return Kyc();
+          return const Kyc();
         },
         redirect: (context, state) async {
           return null;
@@ -383,7 +404,7 @@ class AppRouter {
         path: "/user/agent",
         name: "agent",
         builder: (context, state) {
-          return Agent();
+          return const Agent();
         },
         redirect: (context, state) async {
           return null;
@@ -393,7 +414,7 @@ class AppRouter {
         path: "/preference",
         name: "preference",
         builder: (context, state) {
-          return UserPreference();
+          return const UserPreference();
         },
         redirect: (context, state) async {
           return null;
@@ -403,7 +424,7 @@ class AppRouter {
         path: "/update/password",
         name: "updatePassword",
         builder: (context, state) {
-          return ChangePassword();
+          return const ChangePassword();
         },
         redirect: (context, state) async {
           return null;
@@ -413,7 +434,7 @@ class AppRouter {
         path: "/update/pin",
         name: "updatePin",
         builder: (context, state) {
-          return ChangePin();
+          return const ChangePin();
         },
         redirect: (context, state) async {
           return null;
@@ -423,7 +444,7 @@ class AppRouter {
         path: "/update/profile",
         name: "updateProfile",
         builder: (context, state) {
-          return UpdateProfile();
+          return const UpdateProfile();
         },
         redirect: (context, state) async {
           return null;

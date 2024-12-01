@@ -4,33 +4,38 @@ import 'dart:io';
 import 'package:browse_station/core/config/app.constant.dart';
 import 'package:browse_station/data/model/betting_providers.dart';
 import 'package:browse_station/data/model/epin_providers.dart';
+import 'package:browse_station/data/model/esim.dart';
 import 'package:browse_station/data/model/portraitcuts.dart';
+import 'package:browse_station/data/model/product.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../data/model/bank.dart';
 import '../../../data/model/cable_plan.dart';
+import '../../../data/model/country.dart';
 import '../../../data/model/electricity_providers.dart';
 import '../../helper/helper.dart';
 import '../../state/bloc/repo/app/app_bloc.dart';
+import '../../state/bloc/repo/app/app_event.dart';
 import '../http.dart';
 
-Future<Response> getTransaction({int? limit}) async {
+Future<Response> getTransaction({int? limit, Options? option}) async {
   var appBox = Hive.box('appBox');
-  final res = await dio.get(
-    limit != null ? transactionPath : transactionPath2,
-    data: limit != null
-        ? {
-            'limit': limit,
-            'token': appBox.get('token'),
-          }
-        : {
-            'token': appBox.get('token'),
-          },
-  );
+  final res = await dio.get(limit != null ? transactionPath : transactionPath2,
+      data: limit != null
+          ? {
+              'limit': limit,
+              'token': appBox.get('token'),
+            }
+          : {
+              'token': appBox.get('token'),
+            },
+      options: option);
 
   return res;
 }
@@ -120,9 +125,15 @@ Future<Map<String, dynamic>?> getDataPlanRequest(
   print(res.statusCode);
   if (res.statusCode == HttpStatus.ok ||
       res.statusCode == HttpStatus.notModified) {
-    // print(selectedNetwork.value);
-    // print(res.data[selectedNetwork.value.toUpperCase()]);
-    return res.data[selectedNetwork.value.toUpperCase()]['data_type'];
+    final response = res.data;
+
+    final Map<String, dynamic> data = (response as Map).map(
+      (key, value) {
+        return MapEntry(key.toString().toUpperCase(), value);
+      },
+    );
+
+    return data[selectedNetwork.value.toUpperCase()]['data_type'];
 
     // return DataPlan.fromJsonList(res.data['data']);
   }
@@ -132,6 +143,10 @@ Future<Map<String, dynamic>?> getDataPlanRequest(
 Future<List<CablePlan>> getCablePlanRequest(
     BuildContext context, String selectedNetwork) async {
   context.loaderOverlay.show();
+  final cacheStore = MemCacheStore();
+  final cacheOptions = CacheOptions(
+    policy: CachePolicy.noCache, store: cacheStore, // Do not cache this request
+  );
   final res = await dio.get(
     getCableVariation,
     data: {
@@ -139,11 +154,9 @@ Future<List<CablePlan>> getCablePlanRequest(
         network: selectedNetwork,
       ),
     },
-    options: Options(
-      headers: {
-        'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
-      },
-    ),
+    options: Options(headers: {
+      'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
+    }, extra: cacheOptions.toExtra()),
   );
   if (context.mounted) {
     context.loaderOverlay.hide();
@@ -486,11 +499,52 @@ Future<Response> portraitcutRequest(
   return res;
 }
 
-Future<Response> epinRequest(BuildContext context,
-    {required String epin, required String quantity}) async {
+Future<Response> giftCardRequest(
+  BuildContext context, {
+  required String country,
+  required String productid,
+  required String quantity,
+  required String amount,
+  required String amountngn,
+  required String email,
+  required String phone,
+}) async {
   final res = await dio.post(
-    buyEpin,
-    data: {"epin": epin, "quantity": quantity},
+    postGiftCard,
+    data: {
+      "country": country,
+      "productid": productid,
+      "quantity": quantity,
+      "amount": amount,
+      "amountngn": amountngn,
+      "email": email,
+      "phone": phone
+    },
+    options: Options(
+      headers: {
+        'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
+      },
+    ),
+  );
+
+  return res;
+}
+
+Future<Response> epinRequest(
+  BuildContext context, {
+  required String plan_type,
+  required String plan_id,
+  required String email,
+  required String fullname,
+}) async {
+  final res = await dio.post(
+    postEpin,
+    data: {
+      "plan_type": plan_type,
+      "plan_id": plan_id,
+      "email": email,
+      "fullname": fullname
+    },
     options: Options(
       headers: {
         'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
@@ -575,4 +629,148 @@ Future<Response> changePinRequest(
   );
 
   return res;
+}
+
+handleUpgrade(BuildContext context) async {
+  context.loaderOverlay.show();
+  var appBox = Hive.box('appBox');
+  final resp = await dio.put(
+    upgradeToAgent,
+    data: {
+      'token': appBox.get("token"),
+    },
+  );
+
+  if (resp.statusCode == HttpStatus.ok) {
+    final response = await refreshUSerDetail();
+
+    if (response?.statusCode == HttpStatus.ok && context.mounted) {
+      context
+          .read<AppBloc>()
+          .add(UpdateUserEvent(userData: response?.data['data']['user_data']));
+
+      context.loaderOverlay.hide();
+      showToast(context,
+          title: "success",
+          desc: resp.data['message'],
+          type: ToastificationType.success);
+      return;
+    }
+  } else {
+    if (context.mounted) {
+      context.loaderOverlay.hide();
+      showToast(context, title: "error", desc: resp.data['message']);
+      return;
+    }
+  }
+}
+
+refreshUserDetails(BuildContext context) async {
+  context.loaderOverlay.show();
+  var appBox = Hive.box('appBox');
+  try {
+    final response = await refreshUSerDetail();
+    if (response?.statusCode == HttpStatus.ok && context.mounted) {
+      context
+          .read<AppBloc>()
+          .add(UpdateUserEvent(userData: response?.data['data']['user_data']));
+
+      context.loaderOverlay.hide();
+      showToast(context,
+          title: "success",
+          desc: 'Refresh successful',
+          type: ToastificationType.success);
+      return;
+    } else {
+      throw Exception(response?.data['message']);
+    }
+  } on DioException catch (err) {
+    context.loaderOverlay.hide();
+    showToast(context,
+        title: "error", desc: 'Refresh failed', type: ToastificationType.error);
+  } on Exception catch (err) {
+    context.loaderOverlay.hide();
+    showToast(context,
+        title: "error", desc: 'Refresh failed', type: ToastificationType.error);
+  }
+}
+
+Future<List<Country>> getCountryRequest(BuildContext context) async {
+  context.loaderOverlay.show();
+
+  final res = await dio.get(
+    getCountryVariation,
+    options: Options(headers: {
+      'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
+    }),
+  );
+  if (context.mounted) {
+    context.loaderOverlay.hide();
+    if (res.statusCode == HttpStatus.ok) {
+      return Country.fromJsonList(res.data['data']);
+    } else {
+      return [];
+    }
+  }
+  return [];
+}
+
+Future<List<Product>> getProductRequest(
+    BuildContext context, String selectedProductId) async {
+  context.loaderOverlay.show();
+  final cacheStore = MemCacheStore();
+  final cacheOptions = CacheOptions(
+    policy: CachePolicy.noCache, store: cacheStore, // Do not cache this request
+  );
+  final res = await dio.get(
+    getProductVariation,
+    queryParameters: {
+      'iso': selectedProductId,
+    },
+    options: Options(
+      headers: {
+        'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
+      },
+      extra: cacheOptions.toExtra(),
+    ),
+  );
+  if (context.mounted) {
+    context.loaderOverlay.hide();
+    if (res.statusCode == HttpStatus.ok) {
+      return Product.fromJsonList(res.data['data']);
+    } else {
+      return [];
+    }
+  }
+  return [];
+}
+
+Future<List<EsimModel>> getEsimRequest(
+    BuildContext context, String selectedProductId) async {
+  context.loaderOverlay.show();
+  // final cacheStore = MemCacheStore();
+  // final cacheOptions = CacheOptions(
+  //   policy: CachePolicy.noCache, store: cacheStore, // Do not cache this request
+  // );
+  final res = await dio.get(
+    getEsimPlans,
+    data: {
+      'type': selectedProductId,
+    },
+    options: Options(
+      headers: {
+        'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
+      },
+      // extra: cacheOptions.toExtra(),
+    ),
+  );
+  if (context.mounted) {
+    context.loaderOverlay.hide();
+    if (res.statusCode == HttpStatus.ok) {
+      return EsimModel.fromJsonList(res.data['data']);
+    } else {
+      return [];
+    }
+  }
+  return [];
 }

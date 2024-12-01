@@ -46,14 +46,15 @@ class DashboardHeader extends StatelessWidget {
                       ),
                     ),
                   ),
-
-            SizedBox(width: 4,),
-            const Column(
+            SizedBox(
+              width: 4,
+            ),
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text("Hello Ayo"),
-                Text(
+                Text("Hello ${state.user!.username!}"),
+                const Text(
                   "Welcome Back",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),

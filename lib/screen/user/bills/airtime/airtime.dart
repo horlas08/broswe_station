@@ -18,7 +18,7 @@ import '../../../../data/model/app_config.dart';
 import '../../../component/button.dart';
 
 final PhoneController phoneController = PhoneController(
-  initialValue: const PhoneNumber(isoCode: IsoCode.NG, nsn: '9014985680'),
+  initialValue: const PhoneNumber(isoCode: IsoCode.NG, nsn: ''),
 );
 final _airtimeFormKey = GlobalKey<FormState>();
 
@@ -32,8 +32,7 @@ class Airtime extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController amountController =
-        useTextEditingController(text: '200');
+    final TextEditingController amountController = useTextEditingController();
 
     useEffect(() {
       // amountController.text = '22';

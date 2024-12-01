@@ -54,7 +54,7 @@ Future<void> configureDio() async {
   var customCacheOptions = CacheOptions(
     store: cacheStore,
     policy: CachePolicy.forceCache,
-    priority: CachePriority.high,
+    priority: CachePriority.normal,
     maxStale: const Duration(minutes: 1),
     hitCacheOnErrorExcept: [401, 404],
     keyBuilder: (request) {

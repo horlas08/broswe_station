@@ -267,7 +267,7 @@ class ValidateTransaction extends HookWidget {
                               if (context.mounted) {
                                 context.loaderOverlay.hide();
                                 showToast(context,
-                                    title: "Pin Validate Error",
+                                    title: "Error",
                                     desc: error.response?.data['message'] ??
                                         error.toString());
                               }
@@ -275,8 +275,7 @@ class ValidateTransaction extends HookWidget {
                               if (context.mounted) {
                                 context.loaderOverlay.hide();
                                 showToast(context,
-                                    title: "Pin Validate Error",
-                                    desc: error.toString());
+                                    title: " Error", desc: error.toString());
                               }
                             } finally {
                               if (context.mounted) {

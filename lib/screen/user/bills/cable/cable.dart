@@ -172,7 +172,7 @@ class Cable extends HookWidget {
               height: 20,
             ),
             const Text(
-              "Select Plan",
+              "Select Biller",
               style: TextStyle(
                 color: AppColor.greyLightColor,
                 height: 1.2,

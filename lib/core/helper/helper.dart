@@ -53,9 +53,7 @@ Future<Response?> refreshUSerDetail() async {
 }
 
 String currency(BuildContext context) {
-  Locale locale = Localizations.localeOf(context);
-  var format =
-      NumberFormat.simpleCurrency(locale: Platform.localeName, name: 'NGN');
+  var format = NumberFormat.simpleCurrency(name: 'NGN');
   return format.currencySymbol;
 }
 
@@ -133,11 +131,12 @@ Widget RowList(
             ),
           ),
           const Spacer(),
-          Row(
-            children: [
-              SizedBox(
-                width: 200,
-                child: AutoSizeText(
+          SizedBox(
+            // width: 200,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                AutoSizeText(
                   "${value.toLowerCase().contains('amount') ? "₦" : ""}${value.capitalize()}",
                   style: TextStyle(
                     fontFamily: AppFont.segoui,
@@ -148,13 +147,15 @@ Widget RowList(
                         : Colors.black,
                     fontWeight: FontWeight.bold,
                   ),
-                  overflow: TextOverflow.fade,
+                  overflow: TextOverflow.clip,
+                  softWrap: true,
+                  wrapWords: true,
                   textAlign: TextAlign.end,
                   maxLines: 2,
                 ),
-              ),
-              if (suffixIcon != null) suffixIcon
-            ],
+                if (suffixIcon != null) suffixIcon
+              ],
+            ),
           ),
         ],
       ),
@@ -244,6 +245,52 @@ Widget ListCard(
         ],
       ),
     ),
+  );
+}
+
+void showAppDialog(
+  BuildContext context, {
+  double height = 200,
+  required Widget child,
+  EdgeInsetsGeometry? margin = const EdgeInsets.symmetric(horizontal: 20),
+}) {
+  showGeneralDialog(
+    context: context,
+    barrierDismissible: true,
+    barrierLabel: "true",
+    barrierColor: Colors.black.withOpacity(0.5),
+    transitionDuration: const Duration(milliseconds: 700),
+    pageBuilder: (_, __, ___) {
+      return Center(
+        child: Container(
+          height: height,
+          margin: margin,
+          child: SizedBox.expand(
+            child: Material(
+              borderRadius: BorderRadius.circular(10),
+              child: child,
+            ),
+          ),
+        ),
+      );
+    },
+    transitionBuilder: (_, anim, __, child) {
+      Tween<double> tween;
+      if (anim.status == AnimationStatus.reverse) {
+        tween = Tween(begin: 0, end: 1);
+      } else {
+        tween = Tween(begin: 0, end: 1);
+      }
+
+      return ScaleTransition(
+        scale: tween.animate(anim),
+        // position: tween.animate(anim),
+        child: FadeTransition(
+          opacity: anim,
+          child: child,
+        ),
+      );
+    },
   );
 }
 

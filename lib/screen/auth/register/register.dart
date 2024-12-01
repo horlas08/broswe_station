@@ -28,15 +28,14 @@ class Register extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final emailController = useTextEditingController(text: 'qozeem@gmail.com');
-    final passwordController = useTextEditingController(text: '11111111');
-    final firstNameController = useTextEditingController(text: 'qaawwwq');
-    final lastNameController = useTextEditingController(text: 'dfeeeeq');
-    final usernameController = useTextEditingController(text: 'qwerrtq');
-    final confirmPasswordController =
-        useTextEditingController(text: '11111111');
+    final emailController = useTextEditingController();
+    final passwordController = useTextEditingController();
+    final firstNameController = useTextEditingController();
+    final lastNameController = useTextEditingController();
+    final usernameController = useTextEditingController();
+    final confirmPasswordController = useTextEditingController();
     final phoneController = PhoneController(
-      initialValue: const PhoneNumber(isoCode: IsoCode.NG, nsn: '9014985690'),
+      initialValue: const PhoneNumber(isoCode: IsoCode.NG, nsn: ''),
     );
     final enableButton = useState<bool>(false);
     final checkButton = useState<bool>(false);

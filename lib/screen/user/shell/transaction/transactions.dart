@@ -4,6 +4,7 @@ import 'package:browse_station/core/config/color.constant.dart';
 import 'package:browse_station/core/service/request/protected.dart';
 import 'package:browse_station/screen/component/app_header2.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -20,15 +21,38 @@ class Transactions extends HookWidget {
   Widget build(BuildContext context) {
     RefreshController _refreshController =
         RefreshController(initialRefresh: false);
-    void _onRefresh() async {
-      // monitor network fetch
-      await Future.delayed(Duration(milliseconds: 1000));
-      // if failed,use refreshFailed()
-      _refreshController.refreshCompleted();
-    }
 
     final ValueNotifier<List<dynamic>> transactionList = useState([]);
     final ValueNotifier<bool> loading = useState(true);
+    void _onRefresh() async {
+      try {
+        final cacheStore = MemCacheStore();
+        print(cacheStore);
+        final cacheOptions = CacheOptions(
+          policy: CachePolicy.refresh,
+
+          store: cacheStore, // Do not cache this request
+        );
+        getTransaction(option: Options(extra: cacheOptions.toExtra())).then(
+          (res) {
+            if ((res.statusCode == HttpStatus.ok ||
+                    res.statusCode == HttpStatus.notModified) &&
+                res.data.containsKey('transactions') &&
+                res.data['transactions'].length > 0) {
+              transactionList.value = res.data['transactions'];
+            } else {
+              transactionList.value = [];
+            }
+            loading.value = false;
+          },
+        );
+      } on DioException catch (err) {
+        transactionList.value = [];
+      } on Exception catch (err) {
+        transactionList.value = [];
+      }
+      _refreshController.refreshCompleted();
+    }
 
     useEffect(() {
       try {
@@ -39,6 +63,8 @@ class Transactions extends HookWidget {
                 res.data.containsKey('transactions') &&
                 res.data['transactions'].length > 0) {
               transactionList.value = res.data['transactions'];
+            } else {
+              transactionList.value = [];
             }
             loading.value = false;
           },

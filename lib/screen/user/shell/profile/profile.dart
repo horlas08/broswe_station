@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/helper/helper.dart';
 
-const String url = 'https/browsestations.com';
+const String url = 'https://browsestations.com';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
@@ -88,7 +88,8 @@ class Profile extends StatelessWidget {
                     onTap: () async {
                       try {
                         final Uri _url = Uri.parse('$url/terms-condition');
-                        await launchUrl(_url);
+                        await launchUrl(_url,
+                            mode: LaunchMode.externalApplication);
                       } catch (error) {
                         if (context.mounted) {
                           showToast(context,
@@ -104,7 +105,8 @@ class Profile extends StatelessWidget {
                     onTap: () async {
                       try {
                         final Uri _url = Uri.parse('$url/contact');
-                        await launchUrl(_url);
+                        await launchUrl(_url,
+                            mode: LaunchMode.externalApplication);
                       } catch (error) {
                         if (context.mounted) {
                           showToast(context,
@@ -117,7 +119,7 @@ class Profile extends StatelessWidget {
                     svgPath: "assets/svg/logout.svg",
                     isSvg: true,
                     name: "Sign Out",
-                    desc: "Chat with one of our support",
+                    desc: "Logout from the app",
                     onTap: () {
                       handleLogout().then(
                         (value) {

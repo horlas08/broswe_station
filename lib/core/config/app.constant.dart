@@ -40,11 +40,16 @@ const String postElectricity = '/services/electricity';
 const String postCable = '/services/cable-app';
 const String postWithdraw = '/services/withdrawal';
 const String postPortraitcut = '/services/portraitcuts';
+const String postGiftCard = '/services/giftcard-order';
+const String postEpin = '/services/esim-purchase';
 const String generatemonnify = '/generatemonnify';
 const String generatepsb = '/generatepsb';
 const String getBankList = '/services/get-banks';
 const String getPortraitcuts = '/services/get-portraitcuts';
 const String getCableVariation = '/services/get-cable-variation-id';
+const String getCountryVariation = '/services/get-giftcard-countries';
+const String getEsimPlans = '/services/get-esim-purchase-plans';
+const String getProductVariation = '/services/get-giftcard-products';
 const String getCable = '/get-cable';
 
 const String transactionPath = '/getusertransactions';

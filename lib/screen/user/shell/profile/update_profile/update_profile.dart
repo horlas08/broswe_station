@@ -77,11 +77,12 @@ class UpdateProfile extends HookWidget {
 
               context.loaderOverlay.hide();
 
-              showToast(context,
-                  title: "success",
-                  desc: resp.data['message'],
-                  type: ToastificationType.success,);
-              return;
+              showToast(
+                context,
+                title: "success",
+                desc: resp.data['message'],
+                type: ToastificationType.success,
+              );
             } else {
               if (context.mounted) context.loaderOverlay.hide();
             }

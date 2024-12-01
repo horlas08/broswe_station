@@ -31,9 +31,8 @@ class Login extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final emailController =
-        useTextEditingController(text: "adebisicovenant01@gmail.com");
-    final passwordController = useTextEditingController(text: "0987654");
+    final emailController = useTextEditingController();
+    final passwordController = useTextEditingController();
 
     final enableButton = useState<bool>(false);
 

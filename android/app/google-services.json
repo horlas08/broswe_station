@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "928622878632",
+    "project_id": "browsestations",
+    "storage_bucket": "browsestations.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928622878632:android:ad92a75c6b26f85e8ec79d",
+        "android_client_info": {
+          "package_name": "com.browsestations"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbfRwizP0e0b3iWoA27IGs6LONnkwDxOQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

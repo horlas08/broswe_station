@@ -13,6 +13,7 @@ class Receipt extends StatelessWidget {
     return Container(
       child: Center(
         child: Container(
+          height: 1000,
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           decoration: const BoxDecoration(
             color: AppColor.primaryColor,
@@ -49,11 +50,12 @@ class Receipt extends StatelessWidget {
                     height: 20,
                   ),
                   Text(
-                    data['amount']!,
-                    style: const TextStyle(
+                    "${currency(context)} ${data['amount']!}",
+                    style: TextStyle(
                         fontSize: 25,
                         color: AppColor.primaryColor,
-                        fontWeight: FontWeight.bold),
+                        fontWeight: FontWeight.bold,
+                        fontFamily: AppFont.segoui),
                   ),
                   const SizedBox(
                     height: 10,
@@ -68,8 +70,8 @@ class Receipt extends StatelessWidget {
                   const SizedBox(
                     height: 5,
                   ),
-                  const Text(
-                    "Oct 14, 2024, 5:23 AM",
+                  Text(
+                    data['date']!,
                     style: TextStyle(
                       fontSize: 15,
                       color: AppColor.greyColor,
@@ -112,7 +114,7 @@ class Receipt extends StatelessWidget {
                     height: 10,
                   ),
                   const Text(
-                    "Thanks for using Browse station. Dont forget to refer and earn",
+                    "Thanks for using Browse stations. Dont forget to refer and earn",
                     style: TextStyle(color: AppColor.greyColor),
                   )
                 ],

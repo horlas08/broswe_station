@@ -263,7 +263,7 @@ class Betting extends HookWidget {
                   // mode: Mode.form,
                   decoratorProps: const DropDownDecoratorProps(
                     decoration: InputDecoration(
-                      hintText: "Select Data Plan",
+                      hintText: "Select Biller",
                       isCollapsed: false,
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 15, horizontal: 14),
@@ -271,23 +271,7 @@ class Betting extends HookWidget {
                   ),
 
                   clickProps: ClickProps(
-                    onTapUp: (details) async {
-                      // if (selectedNetwork.value == '' ||
-                      //     selectedNetwork.value.isEmpty) {
-                      //   showToast(
-                      //     context,
-                      //     title: "Validation Error",
-                      //     desc: "Please Select Network",
-                      //   );
-                      // } else {
-                      //   dataIsLoading.value = true;
-                      //   final data = await getDataPlanRequest();
-                      //   if (data.isNotEmpty) {
-                      //     dataPlans.value = data;
-                      //     dataIsLoading.value = false;
-                      //   }
-                      // }
-                    },
+                    onTapUp: (details) async {},
                   ),
 
                   itemAsString: (item) {
@@ -322,7 +306,7 @@ class Betting extends HookWidget {
             // if (cableNameController.text != '' ||
             //     cableNameController.text.isNotEmpty)
             CustomInput(
-              labelText: 'Cable Name',
+              labelText: 'Customer Name',
               controller: bettingNameController,
               hintText: "----",
               validator: ValidationBuilder().required().build(),

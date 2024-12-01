@@ -81,11 +81,7 @@ class AppHeader2 extends StatelessWidget {
                   style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(Colors.white),
                   ),
-                  icon: Icon(
-                    iconData,
-                    size: 30,
-                    color: Colors.black,
-                  ),
+                  icon: Icon(iconData, size: 30, color: AppColor.primaryColor),
                 )
               else
                 const SizedBox()

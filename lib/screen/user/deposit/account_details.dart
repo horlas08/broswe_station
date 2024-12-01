@@ -72,7 +72,7 @@ class AccountDetails extends StatelessWidget {
                         ),
                       );
                     }
-                    ;
+
                     return RowList(
                       key: accountDetail.keys.toList()[index],
                       value: accountDetail.values.toList()[index],

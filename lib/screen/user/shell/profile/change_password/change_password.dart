@@ -25,7 +25,7 @@ class ChangePassword extends HookWidget {
     final newPasswordController = useTextEditingController();
     final confirmPasswordController = useTextEditingController();
     return CustomScaffold(
-      header: const AppHeader2(title: "Upgrade Kyc"),
+      header: const AppHeader2(title: "Change Password"),
       child: Form(
         key: _changePasswordKey,
         child: Column(

@@ -39,7 +39,7 @@ class Onboard extends StatelessWidget {
                 child: Column(
                   children: [
                     const AutoSizeText(
-                      "The only app you need  for everyday payment",
+                      "All your data, airtime, and bill needs in one app.",
                       maxLines: 2,
                       minFontSize: 30,
                       maxFontSize: 35,
@@ -54,7 +54,7 @@ class Onboard extends StatelessWidget {
                       height: 20,
                     ),
                     const AutoSizeText(
-                      "Send & receive money make payment track expenses and much more",
+                      "Simplify your life with easy access to data, airtime, cable TV, electricity bills, betting top-ups, and education pins—all in one place.",
                       maxLines: 2,
                       minFontSize: 10,
                       textAlign: TextAlign.left,

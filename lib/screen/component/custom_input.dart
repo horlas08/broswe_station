@@ -112,7 +112,7 @@ class CustomInput extends StatelessWidget {
 
             isCountrySelectionEnabled: false,
             decoration: InputDecoration(
-              hintText: hintText,
+              // hintText: hintText,
               errorBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: AppColor.danger, width: 1),
               ),
@@ -156,7 +156,7 @@ class CustomInput extends StatelessWidget {
               // isDense: true,
               prefixIcon: prefixIcon,
               prefix: prefix,
-              hintText: hintText,
+              // hintText: hintText,
               fillColor: fillColor,
               filled: filled,
               suffixIcon: suffixIcon,

@@ -25,7 +25,7 @@
         </intent>
     </queries>
     <application
-        android:label="Browse Station"
+        android:label="Browse Stations"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

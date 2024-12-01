@@ -1,13 +1,18 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:browse_station/core/config/color.constant.dart';
+import 'package:browse_station/core/helper/helper.dart';
 import 'package:browse_station/core/state/bloc/repo/app/app_bloc.dart';
 import 'package:browse_station/screen/component/app_header2.dart';
 import 'package:browse_station/screen/component/custom_scaffold.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
+import '../../../core/service/request/protected.dart';
+import '../../../core/state/bloc/repo/app/app_state.dart';
 import '../../component/button.dart';
 
 class Agent extends HookWidget {
@@ -15,9 +20,8 @@ class Agent extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.read<AppBloc>().state.user;
     return CustomScaffold(
-      header: const AppHeader2(title: "Upgrade Kyc"),
+      header: const AppHeader2(title: "Upgrade Account"),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,17 +65,38 @@ class Agent extends HookWidget {
           const SizedBox(
             height: 15,
           ),
-          Button(
-            text: user!.userType ? "You are already an agent" : "Upgrade Now",
-            press: !user.userType
-                ? () async {
-                    // showToast(
-                    //   context,
-                    //   title: "Field Error",
-                    //   desc: "Please Enter Your Bvn Correctly",
-                    // );
-                  }
-                : null,
+          BlocBuilder<AppBloc, AppState>(
+            builder: (context, state) {
+              return Button(
+                text: state.user!.userType
+                    ? "You are already an agent"
+                    : "Upgrade Now",
+                press: !state.user!.userType
+                    ? () async {
+                        try {
+                          await handleUpgrade(context);
+                        } on DioException catch (error) {
+                          if (context.mounted) {
+                            showToast(context,
+                                title: "error",
+                                desc: error.response?.data['message'] ??
+                                    error.toString());
+                          }
+                        } catch (error) {
+                          if (context.mounted)
+                            showToast(context,
+                                title: "error", desc: error.toString());
+                        } finally {
+                          if (context.mounted) {
+                            if (context.loaderOverlay.visible) {
+                              context.loaderOverlay.hide();
+                            }
+                          }
+                        }
+                      }
+                    : null,
+              );
+            },
           )
         ],
       ),

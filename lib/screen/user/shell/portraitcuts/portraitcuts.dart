@@ -245,7 +245,7 @@ class Portraitcuts extends HookWidget {
             CustomInput(
               labelText: 'Address',
               controller: addressController,
-              hintText: "----",
+              hintText: "Enter your address",
               maxLine: 3,
               validator: ValidationBuilder().required().build(),
             ),
@@ -253,7 +253,7 @@ class Portraitcuts extends HookWidget {
             CustomInput(
               labelText: 'Instagram handler',
               controller: instagramUsernameController,
-              hintText: "@qozeem",
+              hintText: "e.g @qozeem",
               validator: ValidationBuilder().required().build(),
             ),
             CustomInput(
@@ -289,7 +289,7 @@ class Portraitcuts extends HookWidget {
                     }
                   }
                 },
-                icon: Icon(
+                icon: const Icon(
                   Ionicons.calendar,
                   color: AppColor.primaryColor,
                 ),

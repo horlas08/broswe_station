@@ -27,6 +27,8 @@ class Transaction extends HookWidget {
               res.data.containsKey('transactions') &&
               res.data['transactions'].length > 0) {
             transactionList.value = res.data['transactions'];
+          } else {
+            transactionList.value = [];
           }
           loading.value = false;
         });

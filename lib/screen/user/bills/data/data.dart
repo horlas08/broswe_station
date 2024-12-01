@@ -57,12 +57,12 @@ class Data extends HookWidget {
       if (selectedNetwork.value != '') {
         getDataPlanRequest(context, selectedNetwork).then(
           (value) {
-            if (value != null) dataResponse.value = value;
+            if (value != null) {
+              dataResponse.value = value;
+            }
           },
         ).onError(
           (error, stackTrace) {
-            print(error);
-            print(stackTrace);
             showToast(context, title: "error", desc: error.toString());
           },
         );

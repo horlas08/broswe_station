@@ -56,25 +56,37 @@ final List<Map<String, dynamic>> allBills = [
     "icon": Ionicons.phone_portrait,
     "name": "Data",
     "desc": 'Buy cheap data bundle',
-    "route": "/airtime"
+    "route": "/data"
   },
   {
     "icon": Ionicons.tv,
     "name": "Cable Tv",
     "desc": 'Pay for cable tv subscription',
-    "route": "/airtime"
+    "route": "/cable"
   },
   {
     "icon": Ionicons.flash_outline,
     "name": "Electricity",
     "desc": 'Top up prepaid electricity meter',
-    "route": "/airtime"
+    "route": "/electricity"
   },
   {
     "icon": Ionicons.card_outline,
     "name": "Deposit",
     "desc": 'Deposit fund to your account',
-    "route": "/education"
+    "route": "/deposit"
+  },
+  {
+    "icon": Ionicons.gift_outline,
+    "name": "Gift Card",
+    "desc": 'Buying and selling of gift-card here',
+    "route": "/gift-card"
+  },
+  {
+    "icon": Ionicons.extension_puzzle_outline,
+    "name": "E-SIM",
+    "desc": 'Get your esim instantly',
+    "route": "/esim"
   },
   {
     "icon": Ionicons.school,
