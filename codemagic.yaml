@@ -13,16 +13,11 @@ workflows:
       - name: Dependencies
         script: |
           flutter pub get
-      - name: Build Android APK
-        script: |
-          flutter build apk --release
-      - name: Build Android App Bundle
-        script: |
-          flutter build appbundle --release
+
       - name: Build iOS
         script: |
           flutter build ipa --release
     artifacts:
-      - build/app/outputs/flutter-apk/app-release.apk # Android APK
-      - build/app/outputs/flutter-apk/app-release.aab # Android App Bundle
+      ##- build/app/outputs/flutter-apk/app-release.apk # Android APK
+      ##- build/app/outputs/flutter-apk/app-release.aab # Android App Bundle
       - build/ios/ipa/*.ipa # iOS IPA file
