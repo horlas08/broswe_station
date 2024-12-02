@@ -16,7 +16,7 @@ workflows:
 
       - name: Build iOS
         script: |
-          flutter build ipa --release
+          flutter build ios --no-codesign
     artifacts:
       ##- build/app/outputs/flutter-apk/app-release.apk # Android APK
       ##- build/app/outputs/flutter-apk/app-release.aab # Android App Bundle
