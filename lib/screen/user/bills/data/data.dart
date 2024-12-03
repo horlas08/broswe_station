@@ -21,7 +21,7 @@ import '../../../../data/model/app_config.dart';
 import '../../../component/button.dart';
 
 final PhoneController phoneController = PhoneController(
-  initialValue: const PhoneNumber(isoCode: IsoCode.NG, nsn: '9014985680'),
+  initialValue: const PhoneNumber(isoCode: IsoCode.NG, nsn: ''),
 );
 final _airtimeFormKey = GlobalKey<FormState>();
 final _dataTypeKey = GlobalKey<DropdownSearchState<String>>();

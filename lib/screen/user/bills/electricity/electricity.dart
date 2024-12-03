@@ -23,7 +23,7 @@ import '../../../../core/service/request/protected.dart';
 import '../../../component/button.dart';
 
 final PhoneController phoneController = PhoneController(
-  initialValue: const PhoneNumber(isoCode: IsoCode.NG, nsn: '9014985680'),
+  initialValue: const PhoneNumber(isoCode: IsoCode.NG, nsn: ''),
 );
 final _airtimeFormKey = GlobalKey<FormState>();
 final _meterTypeKey = GlobalKey<DropdownSearchState<String>>();
@@ -116,7 +116,7 @@ class Electricity extends HookWidget {
       header: const AppHeader2(
         title: 'Buy Electricity',
       ),
-      headerDesc: 'Buy Electricity for any network any biller in Nigeria',
+      headerDesc: 'Buy electricity token instantly',
       child: Form(
         key: _airtimeFormKey,
         onChanged: _handleFormChange,

@@ -101,8 +101,8 @@ class ProfileHeader extends StatelessWidget {
                                 ),
                                 TextSpan(
                                     text: state.user!.hasMonnify
-                                        ? " Trial 1"
-                                        : "Trial 2")
+                                        ? " Tier 1"
+                                        : "Tier 2")
                               ]),
                           style: const TextStyle(
                               fontWeight: FontWeight.normal,

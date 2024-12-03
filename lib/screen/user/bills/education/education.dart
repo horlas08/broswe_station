@@ -42,7 +42,7 @@ class Education extends HookWidget {
 
     return CustomScaffold(
       header: const AppHeader2(title: 'Education'),
-      headerDesc: 'Instantly withdraw your funds',
+      headerDesc: 'Purchase Education Pins (Weac, Neco etc)',
       child: Form(
         key: _educationFormKey,
         onChanged: _handleFormChange,
