@@ -21,3 +21,4 @@ workflows:
       ##- build/app/outputs/flutter-apk/app-release.apk # Android APK
       ##- build/app/outputs/flutter-apk/app-release.aab # Android App Bundle
       - build/ios/ipa/*.ipa # iOS IPA file
+      - build/ios/archive/*.xcarchive # iOS xcarchive IPA file
