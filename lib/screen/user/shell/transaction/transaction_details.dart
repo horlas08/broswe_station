@@ -67,52 +67,52 @@ class TransactionDetails extends HookWidget {
           const SizedBox(
             height: 20,
           ),
-          Button(
-            text: "Download Receipt",
-            prefixIcon: isDownloading.value
-                ? const SizedBox(
-                    width: 30,
-                    height: 30,
-                    child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                        )),
-                  )
-                : null,
-            press: () async {
-              if (isDownloading.value) {
-                return;
-              }
-              isDownloading.value = true;
-              final image = await screenshotController.captureFromWidget(
-                  Receipt(
-                    data: data,
-                  ),
-                  pixelRatio: 6 // Adjust for image clarity
-                  );
-              if (image != null) {
-                // Get a temporary directory to save the image
-                final directory = await getDownloadsDirectory();
-                final imagePath = '${directory?.path}/receipt.png';
-
-                // Save the image
-                File(imagePath).writeAsBytesSync(image);
-                isDownloading.value = false;
-                if (context.mounted) {
-                  showToast(
-                    context,
-                    title: 'File Saved',
-                    desc: "Download Receipt to $imagePath",
-                    type: ToastificationType.success,
-                  );
-                }
-              }
-            },
-          ),
-          const SizedBox(
-            height: 7,
-          ),
+          // Button(
+          //   text: "Download Receipt",
+          //   prefixIcon: isDownloading.value
+          //       ? const SizedBox(
+          //           width: 30,
+          //           height: 30,
+          //           child: Padding(
+          //               padding: EdgeInsets.all(8.0),
+          //               child: CircularProgressIndicator(
+          //                 color: Colors.white,
+          //               )),
+          //         )
+          //       : null,
+          //   press: () async {
+          //     if (isDownloading.value) {
+          //       return;
+          //     }
+          //     isDownloading.value = true;
+          //     final image = await screenshotController.captureFromWidget(
+          //         Receipt(
+          //           data: data,
+          //         ),
+          //         pixelRatio: 6 // Adjust for image clarity
+          //         );
+          //     if (image != null) {
+          //       // Get a temporary directory to save the image
+          //       final directory = await getDownloadsDirectory();
+          //       final imagePath = '${directory?.path}/receipt.png';
+          //
+          //       // Save the image
+          //       File(imagePath).writeAsBytesSync(image);
+          //       isDownloading.value = false;
+          //       if (context.mounted) {
+          //         showToast(
+          //           context,
+          //           title: 'File Saved',
+          //           desc: "Download Receipt to $imagePath",
+          //           type: ToastificationType.success,
+          //         );
+          //       }
+          //     }
+          //   },
+          // ),
+          // const SizedBox(
+          //   height: 7,
+          // ),
           Button(
             text: "Share Receipt",
             prefixIcon: loading.value
