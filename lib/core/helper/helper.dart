@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:browse_station/core/config/color.constant.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
@@ -45,9 +46,19 @@ void showToast(
 
 Future<Response?> refreshUSerDetail() async {
   var appBox = Hive.box("appBox");
-  final res = await dio.get(getUserDetails, data: {
-    'token': appBox.get('token'),
-  });
+  final cacheStore = MemCacheStore();
+  final cacheOptions = CacheOptions(
+    policy: CachePolicy.noCache, store: cacheStore, // Do not cache this request
+  );
+  final res = await dio.get(
+    getUserDetails,
+    data: {
+      'token': appBox.get('token'),
+    },
+    options: Options(
+      extra: cacheOptions.toExtra(),
+    ),
+  );
 
   return res;
 }
