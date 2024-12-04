@@ -14,7 +14,7 @@ class AllBills extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.scaffordBg,
-      appBar: AppHeader(title: "Bills & Utilities"),
+      appBar: const AppHeader(title: "Bills & Utilities"),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(

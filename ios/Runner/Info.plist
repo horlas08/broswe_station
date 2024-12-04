@@ -35,7 +35,7 @@
 	<string>This app requires access to the camera.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Browse Stations Authentication?</string>
-	<key>NSPhotoLibraryUsageDescription</key>
+	<key>NSPhotoLibraryUsageDescriptio`n</key>
 	<string>This app requires access to the photo library.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>

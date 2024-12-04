@@ -6,18 +6,21 @@ import 'package:browse_station/screen/component/app_header2.dart';
 import 'package:browse_station/screen/component/button.dart';
 import 'package:browse_station/screen/component/custom_input.dart';
 import 'package:browse_station/screen/component/custom_scaffold.dart';
+import 'package:dio/dio.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:form_validator/form_validator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/config/color.constant.dart';
 import '../../../../data/model/esim.dart';
 
-final _portraitFormKey = GlobalKey<FormState>();
+final _esimFormKey = GlobalKey<FormState>();
 
 final _dropDownEsimKey = GlobalKey<DropdownSearchState<EsimModel>>();
 final _dropDownEsimTypeKey = GlobalKey<DropdownSearchState<EsimModel>>();
@@ -39,7 +42,7 @@ class Esim extends HookWidget {
     final ValueNotifier<bool> enableButton = useState(false);
 
     void _handleFormChange() {
-      enableButton.value = _portraitFormKey.currentState!.validate() ?? true;
+      enableButton.value = _esimFormKey.currentState!.validate() ?? true;
     }
 
     final ValueNotifier<EsimModel?> selectedEsim = useState(null);
@@ -52,9 +55,9 @@ class Esim extends HookWidget {
         title: 'Esim',
         showBack: false,
       ),
-      headerDesc: 'Instantly withdraw your funds',
+      headerDesc: 'Purchase your T-mobile E-sims',
       child: Form(
-        key: _portraitFormKey,
+        key: _esimFormKey,
         onChanged: _handleFormChange,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,6 +173,8 @@ class Esim extends HookWidget {
 
                   onChanged: (value) {
                     selectedEsimType.value = value;
+                    esimPlanList.value = [];
+                    selectedEsim.value = null;
                   },
 
                   // mode: Mode.form,
@@ -287,24 +292,50 @@ class Esim extends HookWidget {
                       return false;
                     }
                     if (esimPlanList.value.isEmpty) {
-                      await getEsimRequest(
-                        context,
-                        selectedEsimType.value!.name,
-                      ).then(
-                        (value) {
-                          esimPlanList.value = value;
-                          _dropDownEsimKey.currentState?.openDropDownSearch();
-                        },
-                      ).onError(
-                        (error, stackTrace) {
-                          print(error);
-                          print(stackTrace);
-                          if (context.mounted) {
-                            showToast(context,
-                                title: "error", desc: error.toString());
+                      try {
+                        context.loaderOverlay.show();
+                        final res = await getEsimRequest(
+                          context,
+                          selectedEsimType.value!.name,
+                        );
+                        if (context.mounted) {
+                          if (res.isNotEmpty) {
+                            context.loaderOverlay.hide();
+                            esimPlanList.value = res;
+                            _dropDownEsimKey.currentState?.openDropDownSearch();
                           }
-                        },
-                      );
+                        }
+                      } on DioException catch (error) {
+                        if (context.mounted) {
+                          context.loaderOverlay.hide();
+                          showToast(
+                            context,
+                            title: "error",
+                            desc: error.response?.data['message'],
+                          );
+                        }
+                      } on Exception catch (error) {
+                        if (context.mounted) {
+                          context.loaderOverlay.hide();
+                          showToast(context,
+                              title: "error", desc: error.toString());
+                        }
+                      } finally {
+                        if (context.mounted) context.loaderOverlay.hide();
+                      }
+
+                      //     .then(
+                      //   (value) {
+
+                      //   },
+                      // ).onError(
+                      //   (error, stackTrace) {
+                      //     if (context.mounted) {
+                      //       showToast(context,
+                      //           title: "error", desc: error.toString());
+                      //     }
+                      //   },
+                      // );
 
                       return false;
                     }
@@ -420,8 +451,18 @@ class Esim extends HookWidget {
             Row(
               children: [
                 TextButton(
-                  onPressed: () {},
-                  child: Text("Refill esim"),
+                  onPressed: () async {
+                    try {
+                      final Uri _url = Uri.parse('https://broswstation.com/');
+                      await launchUrl(_url);
+                    } catch (error) {
+                      if (context.mounted) {
+                        showToast(context,
+                            title: "error", desc: error.toString());
+                      }
+                    }
+                  },
+                  child: const Text("Refill T-Mobile esim"),
                 ),
                 Spacer(),
                 TextButton(

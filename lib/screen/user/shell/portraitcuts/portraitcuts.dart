@@ -52,7 +52,7 @@ class Portraitcuts extends HookWidget {
         title: 'Portraitcuts',
         showBack: false,
       ),
-      headerDesc: 'Instantly withdraw your funds',
+      headerDesc: 'Book Haircuts Appointment within Lagos',
       child: Form(
         key: _portraitFormKey,
         onChanged: _handleFormChange,

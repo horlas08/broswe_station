@@ -43,12 +43,14 @@ const String postPortraitcut = '/services/portraitcuts';
 const String postGiftCard = '/services/giftcard-order';
 const String postEpin = '/services/esim-purchase';
 const String generatemonnify = '/generatemonnify';
+const String kyc = '/services/kyc';
 const String generatepsb = '/generatepsb';
 const String getBankList = '/services/get-banks';
+const String getBankKycList = '/services/get-banks-kyc';
 const String getPortraitcuts = '/services/get-portraitcuts';
 const String getCableVariation = '/services/get-cable-variation-id';
 const String getCountryVariation = '/services/get-giftcard-countries';
-const String getEsimPlans = '/services/get-esim-purchase-plans';
+const String getEsimPlans = '/services/get-esim-purchase-plans-type';
 const String getProductVariation = '/services/get-giftcard-products';
 const String getCable = '/get-cable';
 

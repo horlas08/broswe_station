@@ -364,10 +364,11 @@ Future<Response> buyBettingRequest(
   return res;
 }
 
-Future<List<Bank>> getBankListRequest(BuildContext context) async {
+Future<List<Bank>> getBankListRequest(BuildContext context,
+    {String path = getBankList}) async {
   context.loaderOverlay.show();
   final res = await dio.get(
-    getBankList,
+    path,
     options: Options(
       headers: {
         'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
@@ -747,11 +748,10 @@ Future<List<Product>> getProductRequest(
 
 Future<List<EsimModel>> getEsimRequest(
     BuildContext context, String selectedProductId) async {
-  context.loaderOverlay.show();
-  // final cacheStore = MemCacheStore();
-  // final cacheOptions = CacheOptions(
-  //   policy: CachePolicy.noCache, store: cacheStore, // Do not cache this request
-  // );
+  final cacheStore = MemCacheStore();
+  final cacheOptions = CacheOptions(
+    policy: CachePolicy.noCache, store: cacheStore, // Do not cache this request
+  );
   final res = await dio.get(
     getEsimPlans,
     data: {
@@ -761,11 +761,10 @@ Future<List<EsimModel>> getEsimRequest(
       headers: {
         'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
       },
-      // extra: cacheOptions.toExtra(),
+      extra: cacheOptions.toExtra(),
     ),
   );
   if (context.mounted) {
-    context.loaderOverlay.hide();
     if (res.statusCode == HttpStatus.ok) {
       return EsimModel.fromJsonList(res.data['data']);
     } else {
@@ -773,4 +772,62 @@ Future<List<EsimModel>> getEsimRequest(
     }
   }
   return [];
+}
+
+Future handleKycRequest(
+  BuildContext context, {
+  required String bvn,
+  required String accountNumber,
+  required String bankCode,
+}) async {
+  try {
+    context.loaderOverlay.show();
+
+    var appBox = Hive.box('appBox');
+    final resp = await dio.post(
+      kyc,
+      data: {
+        "bvn": bvn,
+        "bank_code": bankCode,
+        "account_no": accountNumber,
+      },
+      options: Options(
+        headers: {
+          'Authorization':
+              "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
+        },
+      ),
+    );
+
+    if (resp.statusCode == HttpStatus.ok) {
+      final response = await refreshUSerDetail();
+
+      if (response?.statusCode == HttpStatus.ok && context.mounted) {
+        context.read<AppBloc>().add(
+            UpdateUserEvent(userData: response?.data['data']['user_data']));
+
+        context
+            .read<AppBloc>()
+            .add(AddAccountEvent(accounts: response?.data['data']['accounts']));
+        context.loaderOverlay.hide();
+        showToast(context,
+            title: "success",
+            desc: resp.data['message'],
+            type: ToastificationType.success);
+        return;
+      }
+    } else {
+      if (context.mounted) {
+        context.loaderOverlay.hide();
+        showToast(context, title: "error", desc: resp.data['message']);
+        return;
+      }
+    }
+  } on DioException catch (error) {
+    if (context.mounted) {
+      context.loaderOverlay.hide();
+      showToast(context, title: "error", desc: error.response?.data['message']);
+      return;
+    }
+  }
 }

@@ -130,10 +130,10 @@ class LoginVerify extends HookWidget {
                       Row(
                         children: [
                           TextButton(
-                            onPressed: () {
+                            onPressed: () async {
                               var appBox = Hive.box("appBox");
-                              appBox.clear();
-                              context.go("/");
+                              await appBox.clear();
+                              if (context.mounted) context.go("/");
                             },
                             child: const Text("Yes Continue"),
                           ),

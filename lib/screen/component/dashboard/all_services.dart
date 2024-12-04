@@ -10,7 +10,7 @@ class AllServices extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(20),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Colors.white,
@@ -132,7 +132,7 @@ class AllServices extends StatelessWidget {
             children: [
               TouchableOpacity(
                 onTap: () {
-                  context.go('/deposit');
+                  context.go('/esim');
                 },
                 child: Column(
                   children: [
@@ -145,19 +145,19 @@ class AllServices extends StatelessWidget {
                       ),
                       child: const Center(
                         child: Icon(
-                          Ionicons.card_outline,
+                          Ionicons.extension_puzzle_outline,
                           size: 30,
                           color: AppColor.secondaryColor,
                         ),
                       ),
                     ),
-                    Text("Deposit"),
+                    const Text("E-SIM"),
                   ],
                 ),
               ),
               TouchableOpacity(
                 onTap: () {
-                  context.go('/withdraw');
+                  context.go('/gift-card');
                 },
                 child: Column(
                   children: [
@@ -170,13 +170,13 @@ class AllServices extends StatelessWidget {
                       ),
                       child: const Center(
                         child: Icon(
-                          Ionicons.cash,
+                          Ionicons.gift_outline,
                           size: 30,
                           color: AppColor.secondaryColor,
                         ),
                       ),
                     ),
-                    Text("Withdraw"),
+                    Text("Gift Card"),
                   ],
                 ),
               ),

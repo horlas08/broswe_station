@@ -26,9 +26,6 @@ class Agent extends HookWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Let know you more",
-          ),
           const SizedBox(
             height: 20,
           ),

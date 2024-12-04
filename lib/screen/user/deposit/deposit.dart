@@ -52,14 +52,14 @@ class Deposit extends StatelessWidget {
             icon: Remix.bank_line,
             margin: EdgeInsets.zero,
             onTap: () {
-              if (user!.hasPsb) {
+              if (accounts!.length < 2) {
                 context.pushNamed("kyc");
                 return;
               }
               final Map<String, String> account = {
-                'account number': accounts![0].accountNumber.toString(),
-                'account name': accounts[0].accountName.toString(),
-                'bank name': accounts[0].bankName.toString(),
+                'account number': accounts![1].accountNumber.toString(),
+                'account name': accounts[1].accountName.toString(),
+                'bank name': accounts[1].bankName.toString(),
                 'type': "Monnify",
               };
               context.pushNamed("myAccount", extra: account);
