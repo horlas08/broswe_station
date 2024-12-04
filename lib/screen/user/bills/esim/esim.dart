@@ -453,7 +453,8 @@ class Esim extends HookWidget {
                 TextButton(
                   onPressed: () async {
                     try {
-                      final Uri _url = Uri.parse('https://broswstation.com/');
+                      final Uri _url = Uri.parse(
+                          'https://browsestations.com/user/esim-refill');
                       await launchUrl(_url);
                     } catch (error) {
                       if (context.mounted) {
