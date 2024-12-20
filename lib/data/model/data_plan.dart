@@ -3,15 +3,17 @@ class DataPlan {
   String? plan;
   String? validity;
   String? amount;
+  String? amount_agent;
   String? type;
 
-  DataPlan({this.id, this.plan, this.validity, this.amount, this.type});
+  DataPlan({this.id, this.plan, this.validity, this.amount, this.type, this.amount_agent});
 
   DataPlan.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     plan = json['plan'];
     validity = json['validity'];
     amount = json['amount'];
+    amount_agent = json['amount_agent'];
     type = json['type'];
   }
 
@@ -21,6 +23,7 @@ class DataPlan {
     data['plan'] = this.plan;
     data['validity'] = this.validity;
     data['amount'] = this.amount;
+    data['amount_agent'] = this.amount_agent;
     data['type'] = this.type;
     return data;
   }
@@ -40,6 +43,7 @@ class DataPlan {
       'plan': this.plan,
       'validity': this.validity,
       'amount': this.amount,
+      'amount_agent': this.amount_agent,
       'type': this.type,
     };
   }
@@ -50,6 +54,7 @@ class DataPlan {
       plan: map['plan'] as String,
       validity: map['validity'] as String,
       amount: map['amount'] as String,
+      amount_agent: map['amount_agent'] ,
       type: map['type'] as String,
     );
   }

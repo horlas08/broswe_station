@@ -16,6 +16,7 @@ import 'package:phone_form_field/phone_form_field.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
 import '../../../../core/config/color.constant.dart';
+import '../../../../core/state/bloc/repo/app/app_bloc.dart';
 import '../../../../core/state/cubic/app_config_cubit.dart';
 import '../../../../data/model/app_config.dart';
 import '../../../component/button.dart';
@@ -41,6 +42,7 @@ class Data extends HookWidget {
         useTextEditingController(text: '');
 
     final ValueNotifier<Map<String, dynamic>> dataResponse = useState({});
+    final user = context.read<AppBloc>().state.user;
 
     final ValueNotifier<bool> enableButton = useState(false);
 
@@ -63,7 +65,8 @@ class Data extends HookWidget {
           },
         ).onError(
           (error, stackTrace) {
-            showToast(context, title: "error", desc: error.toString());
+            if (context.mounted)
+              showToast(context, title: "error", desc: error.toString());
           },
         );
       }
@@ -426,7 +429,9 @@ class Data extends HookWidget {
                         onChanged: (value) {
                           print(_dataPlanKey.currentState?.getSelectedItem);
                           selectedDataPlan.value = value!;
-                          amountController.text = value.amount.toString();
+                          amountController.text = user!.userType
+                              ? value.amount_agent.toString()
+                              : value.amount.toString();
                         },
 
                         // mode: Mode.form,
@@ -459,6 +464,7 @@ class Data extends HookWidget {
                     labelText: 'Amount',
                     controller: amountController,
                     hintText: "Amount",
+                    readOnly: true,
                     prefix: Text(
                       currency(context),
                       style: const TextStyle(

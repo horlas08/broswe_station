@@ -14,7 +14,6 @@ class Deposit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accounts = context.read<AppBloc>().state.accounts;
-    final user = context.read<AppBloc>().state.user;
 
     return CustomScaffold(
       header: AppHeader2(title: "Deposit Method"),
