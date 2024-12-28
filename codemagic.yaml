@@ -1,24 +1,32 @@
 workflows:
-  flutter-build:
-    name: Flutter Build (iOS and Android)
+  shorebird-ios-build:
+    name: Shorebird Build (iOS Unsigned)
     max_build_duration: 60
     environment:
       flutter: stable # Specify the Flutter channel (stable, beta, dev)
       xcode: latest # Use the latest version of Xcode for iOS builds
+      groups:
+        - shorebird # Reference the variable group
+
 
     scripts:
-      - name: Install Flutter
+      - name: Install Flutter and Shorebird CLI
         script: |
           flutter --version
-      - name: Dependencies
-        script: |
+          curl --proto '=https' --tlsv1.2 https://raw.githubusercontent.com/shorebirdtech/install/main/install.sh -sSf | bash
+          export PATH="$HOME/.shorebird/bin:$PATH"  >> $CM_ENV
+          echo $PATH
+          shorebird --version
           flutter pub get
-
-      - name: Build iOS
+          cd ios
+          pod install
+          cd ..
+      - name: Shorebird Release
         script: |
-          flutter build ipa --no-codesign
+          shorebird release --help
+          shorebird release ios -- --no-codesign=off
     artifacts:
-      ##- build/app/outputs/flutter-apk/app-release.apk # Android APK
-      ##- build/app/outputs/flutter-apk/app-release.aab # Android App Bundle
-      - build/ios/ipa/*.ipa # iOS IPA file
-      - build/ios/archive/*.xcarchive # iOS xcarchive IPA file
+      - build/ios/ipa/*.xcarchive # Unsigned iOS IPA file
+      # - shorebird/*.patch # Shorebird patch files
+      # pod repo update
+      # pod update Sentry/HybridSDK
