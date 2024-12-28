@@ -22,7 +22,9 @@ import '../../../core/state/bloc/repo/app/app_event.dart';
 import '../../component/custom_input.dart';
 
 final _formKey = GlobalKey<FormState>();
-
+final phoneController = PhoneController(
+  initialValue: const PhoneNumber(isoCode: IsoCode.NG, nsn: ''),
+);
 class Register extends HookWidget {
   const Register({super.key});
 
@@ -34,9 +36,7 @@ class Register extends HookWidget {
     final lastNameController = useTextEditingController();
     final usernameController = useTextEditingController();
     final confirmPasswordController = useTextEditingController();
-    final phoneController = PhoneController(
-      initialValue: const PhoneNumber(isoCode: IsoCode.NG, nsn: ''),
-    );
+
     final enableButton = useState<bool>(false);
     final checkButton = useState<bool>(false);
     void _handleFormChange() {
