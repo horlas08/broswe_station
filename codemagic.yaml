@@ -6,7 +6,7 @@ workflows:
       flutter: stable # Specify the Flutter channel (stable, beta, dev)
       xcode: latest # Use the latest version of Xcode for iOS builds
       groups:
-        - shorebird # Reference the variable group
+        - broswestation # Reference the variable group
 
 
     scripts:
