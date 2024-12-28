@@ -25,7 +25,7 @@ workflows:
           shorebird release ios  --no-codesign
 
     artifacts:
-      - build/ios/ipa/*.xcarchive # Unsigned iOS IPA file
+      - build/ios/archive/*.xcarchive # Unsigned iOS IPA file
       # - shorebird/*.patch # Shorebird patch files
       # pod repo update
       # pod update Sentry/HybridSDK
