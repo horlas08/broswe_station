@@ -24,7 +24,8 @@ workflows:
       - name: Shorebird Release
         script: |
           shorebird release --help
-          shorebird release ios -- --no-codesign
+          shorebird release ios \
+          --no-codesign
     artifacts:
       - build/ios/ipa/*.xcarchive # Unsigned iOS IPA file
       # - shorebird/*.patch # Shorebird patch files
