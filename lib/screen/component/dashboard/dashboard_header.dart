@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ripple_wave/ripple_wave.dart';
+import 'package:touchable_opacity/touchable_opacity.dart';
 
 import '../../../core/config/color.constant.dart';
 import '../../../core/state/bloc/repo/app/app_bloc.dart';
@@ -19,30 +21,40 @@ class DashboardHeader extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             state.user!.photo == null
-                ? RippleWave(
-                    child: CircleAvatar(
-                      child: Image.asset("assets/images/profile-picture.png"),
-                      minRadius: 2,
-                      maxRadius: 30,
+                ? TouchableOpacity(
+                    onTap: () {
+                      context.pushNamed('updateProfile');
+                    },
+                    child: RippleWave(
+                      child: CircleAvatar(
+                        child: Image.asset("assets/images/profile-picture.png"),
+                        minRadius: 2,
+                        maxRadius: 30,
+                      ),
                     ),
                   )
-                : Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      border: Border.all(color: AppColor.primaryColor),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(150.0),
-                      child: CachedNetworkImage(
-                        imageUrl: state.user!.photo!,
-                        height: 40,
-                        width: 40,
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(
-                          color: AppColor.primaryColor,
+                : TouchableOpacity(
+                    onTap: () {
+                      context.pushNamed('updateProfile');
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        border: Border.all(color: AppColor.primaryColor),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(150.0),
+                        child: CachedNetworkImage(
+                          imageUrl: state.user!.photo!,
+                          height: 40,
+                          width: 40,
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator(
+                            color: AppColor.primaryColor,
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error),
                         ),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
                       ),
                     ),
                   ),

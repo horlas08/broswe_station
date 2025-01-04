@@ -125,14 +125,12 @@ class Login extends HookWidget {
                         child: Column(
                           children: [
                             CustomInput(
-                              labelText: "Email Address",
+                              labelText: "Email or Username",
                               needLabel: true,
-                              validator: ValidationBuilder()
-                                  .email('')
-                                  .maxLength(50, '')
-                                  .build(),
+                              validator:
+                                  ValidationBuilder().maxLength(50, '').build(),
                               controller: emailController,
-                              hintText: 'qozeem@gmail.com',
+                              hintText: 'test@gmail.com',
                             ),
                             CustomInput(
                               labelText: "Password",

@@ -29,7 +29,7 @@ class Deposit extends StatelessWidget {
           ),
           ListCard(
             name: "Monnify Account",
-            desc: "View your monnify details (kyc require)",
+            desc: "View your monnify account details",
             icon: Remix.bank_line,
             margin: EdgeInsets.zero,
             onTap: () {
@@ -47,7 +47,7 @@ class Deposit extends StatelessWidget {
           ),
           ListCard(
             name: "9PSB Account",
-            desc: "View your monnify details",
+            desc: "View your 9PSB account (kyc require)",
             icon: Remix.bank_line,
             margin: EdgeInsets.zero,
             onTap: () {
