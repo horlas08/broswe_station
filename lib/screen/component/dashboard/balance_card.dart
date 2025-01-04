@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:widget_visibility_detector/widget_visibility_detector.dart';
 
-import '../../../core/helper/helper.dart';
 import '../../../core/service/request/protected.dart';
 import '../../../core/state/bloc/repo/app/app_state.dart';
 
@@ -21,6 +21,10 @@ class BalanceCard extends HookWidget {
     final hideBalance = useState<bool>(false);
     return BlocBuilder<AppBloc, AppState>(
       builder: (context, state) {
+        final balance = double.tryParse(state.user!.balance.toString());
+        final currencyFormatter =
+            NumberFormat.currency(locale: "en_NG", symbol: "₦");
+        String formattedCurrency = currencyFormatter.format(balance ?? 0.0);
         return WidgetVisibilityDetector(
           onAppear: () async {
             await refreshUserDetails(context, showLoading: false);
@@ -53,7 +57,7 @@ class BalanceCard extends HookWidget {
                             ),
                           )
                         : Text(
-                            "${currency(context)} ${state.user?.balance}",
+                            formattedCurrency,
                             style: TextStyle(
                               fontFamily: AppFont.segoui,
                               color: Colors.white,
