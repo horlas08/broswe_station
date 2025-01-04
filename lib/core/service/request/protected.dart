@@ -666,8 +666,8 @@ handleUpgrade(BuildContext context) async {
   }
 }
 
-refreshUserDetails(BuildContext context) async {
-  context.loaderOverlay.show();
+refreshUserDetails(BuildContext context, {bool showLoading = true}) async {
+  if (showLoading) context.loaderOverlay.show();
   var appBox = Hive.box('appBox');
   try {
     final response = await refreshUSerDetail();
@@ -676,21 +676,23 @@ refreshUserDetails(BuildContext context) async {
           .read<AppBloc>()
           .add(UpdateUserEvent(userData: response?.data['data']['user_data']));
 
-      context.loaderOverlay.hide();
-      showToast(context,
-          title: "success",
-          desc: 'Refresh successful',
-          type: ToastificationType.success);
+      if (showLoading) context.loaderOverlay.hide();
+      if (showLoading) {
+        showToast(context,
+            title: "success",
+            desc: 'Refresh successful',
+            type: ToastificationType.success);
+      }
       return;
     } else {
       throw Exception(response?.data['message']);
     }
   } on DioException catch (err) {
-    context.loaderOverlay.hide();
+    if (showLoading) context.loaderOverlay.hide();
     showToast(context,
         title: "error", desc: 'Refresh failed', type: ToastificationType.error);
   } on Exception catch (err) {
-    context.loaderOverlay.hide();
+    if (showLoading) context.loaderOverlay.hide();
     showToast(context,
         title: "error", desc: 'Refresh failed', type: ToastificationType.error);
   }

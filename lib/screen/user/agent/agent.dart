@@ -56,7 +56,7 @@ class Agent extends HookWidget {
             height: 20,
           ),
           const AutoSizeText(
-            "By continue we are migratiog your account from user to agent account and you will be charge N1000 for the upgrade",
+            "By continue we are migratiog your account from user to agent account and you will be charge N2000 for the upgrade",
             maxLines: 3,
           ),
           const SizedBox(

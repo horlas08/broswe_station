@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:phone_form_field/phone_form_field.dart';
+import 'package:remixicon/remixicon.dart';
 
 import '../../core/config/color.constant.dart';
 
-class CustomInput extends StatelessWidget {
+class CustomInput extends HookWidget {
   final String? hintText;
   final void Function(String)? onChanged;
   final TextEditingController? controller;
@@ -77,6 +79,7 @@ class CustomInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final showIcon = useState(false);
     return Wrap(
       children: [
         Text(
@@ -156,10 +159,17 @@ class CustomInput extends StatelessWidget {
               // isDense: true,
               prefixIcon: prefixIcon,
               prefix: prefix,
-              // hintText: hintText,
+              hintText: isPassword ? 'Password must be 8 or above' : null,
               fillColor: fillColor,
               filled: filled,
-              suffixIcon: suffixIcon,
+              suffixIcon: isPassword
+                  ? IconButton(
+                      onPressed: () {
+                        showIcon.value = !showIcon.value;
+                      },
+                      icon: Icon(
+                          showIcon.value ? Remix.eye_off_line : Remix.eye_line))
+                  : suffixIcon,
               isCollapsed: false,
               // errorText: '',
               contentPadding:
@@ -171,7 +181,7 @@ class CustomInput extends StatelessWidget {
             focusNode: focusNode,
             validator: validator,
             keyboardType: textInputType,
-            obscureText: isPassword ? true : false,
+            obscureText: isPassword && showIcon.value ? true : false,
             onFieldSubmitted: (text) => nextFocus != null
                 ? FocusScope.of(context).requestFocus(nextFocus)
                 : null,

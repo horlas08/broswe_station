@@ -62,6 +62,7 @@ Future<void> configureDio() async {
     },
     allowPostMethod: false,
   );
+
   dio.interceptors.add(InterceptorsWrapper(
     onRequest: (RequestOptions options, handler) {
       if (options.uri.toString().contains('transaction')) {
