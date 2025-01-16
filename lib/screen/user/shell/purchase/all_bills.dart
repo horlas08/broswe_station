@@ -2,16 +2,26 @@ import 'package:browse_station/core/config/color.constant.dart';
 import 'package:browse_station/screen/component/app_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_boxicons/flutter_boxicons.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ionicons/ionicons.dart';
 
 import '../../../component/all_bill_items.dart';
 
-class AllBills extends StatelessWidget {
+class AllBills extends HookWidget {
   const AllBills({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // final response = useState([]);
+    // useEffect(() {
+    //   getLabel(context).then(
+    //     (value) {
+    //       response.value = value.data['data'];
+    //     },
+    //   );
+    //   return null;
+    // }, []);
     return Scaffold(
       backgroundColor: AppColor.scaffordBg,
       appBar: const AppHeader(title: "Bills & Utilities"),

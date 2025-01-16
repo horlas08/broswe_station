@@ -22,7 +22,7 @@ workflows:
           pod install
           cd ..
           shorebird --version
-          shorebird release ios  --no-codesign
+          shorebird patch ios  --no-codesign
 
     artifacts:
       - build/ios/archive/*.xcarchive # Unsigned iOS IPA file

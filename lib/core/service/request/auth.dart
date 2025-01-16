@@ -1,5 +1,6 @@
 import 'package:browse_station/core/config/app.constant.dart';
 import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import '../http.dart';
@@ -50,12 +51,17 @@ Future<Response> pinVerifyRequest({
 
 Future<Response> biometricVerifyRequest() async {
   var appBox = Hive.box('appBox');
-  final res = await dio.get(
-    getUserDetails,
-    data: {
-      'token': appBox.get('token'),
-    },
+  final cacheStore = MemCacheStore();
+  final cacheOptions = CacheOptions(
+    policy: CachePolicy.noCache,
+    store: cacheStore, // Do not cache this request
   );
+
+  final res = await dio.get(getUserDetails,
+      data: {
+        'token': appBox.get('token'),
+      },
+      options: Options(extra: cacheOptions.toExtra()));
 
   return res;
 }
