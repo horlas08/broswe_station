@@ -1,11 +1,14 @@
 import 'package:browse_station/core/config/color.constant.dart';
 import 'package:browse_station/screen/component/app_header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ionicons/ionicons.dart';
 
+import '../../../../core/state/bloc/repo/app/app_bloc.dart';
+import '../../../../data/model/user.dart';
 import '../../../component/all_bill_items.dart';
 
 class AllBills extends HookWidget {
@@ -13,15 +16,8 @@ class AllBills extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final response = useState([]);
-    // useEffect(() {
-    //   getLabel(context).then(
-    //     (value) {
-    //       response.value = value.data['data'];
-    //     },
-    //   );
-    //   return null;
-    // }, []);
+    final User user = context.read<AppBloc>().state.user!;
+
     return Scaffold(
       backgroundColor: AppColor.scaffordBg,
       appBar: const AppHeader(title: "Bills & Utilities"),
@@ -38,9 +34,19 @@ class AllBills extends HookWidget {
                     name: allBills[index]['name'],
                     icon: allBills[index]['icon'],
                     onTap: () {
-                      context.push(
-                        allBills[index]['route'],
-                      );
+                      if (allBills[index]['route'] == '/crypto') {
+                        context.push(
+                          user.kyc > 1 ? "/crypto" : "/user/kyc",
+                        );
+                      } else if (allBills[index]['route'] == '/withdraw') {
+                        context.push(
+                          user.kyc > 1 ? "/withdraw" : "/user/kyc",
+                        );
+                      } else {
+                        context.push(
+                          allBills[index]['route'],
+                        );
+                      }
                     },
                     desc: allBills[index]['desc'],
                   );
@@ -73,6 +79,12 @@ final List<Map<String, dynamic>> allBills = [
     "name": "Cable Tv",
     "desc": 'Pay for cable tv subscription',
     "route": "/cable"
+  },
+  {
+    "icon": Ionicons.logo_bitcoin,
+    "name": "Sell Crypto",
+    "desc": 'Sell Your Coin Easily And Instantly',
+    "route": "/crypto",
   },
   {
     "icon": Ionicons.flash_outline,

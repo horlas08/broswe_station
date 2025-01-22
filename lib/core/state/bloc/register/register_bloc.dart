@@ -33,6 +33,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         password: event.password,
         phone: event.phone,
         email: event.email,
+        code: event.code,
       );
 
       // if (res == null) {

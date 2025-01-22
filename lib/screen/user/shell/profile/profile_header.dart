@@ -100,9 +100,9 @@ class ProfileHeader extends StatelessWidget {
                                   ),
                                 ),
                                 TextSpan(
-                                    text: state.user!.hasMonnify
-                                        ? " Tier 1"
-                                        : "Tier 2")
+                                    text: state.user!.kyc > 1
+                                        ? " KYC LEVEL 2"
+                                        : "KYC LEVEL 1"),
                               ]),
                           style: const TextStyle(
                               fontWeight: FontWeight.normal,

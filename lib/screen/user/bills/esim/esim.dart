@@ -53,7 +53,7 @@ class Esim extends HookWidget {
     return CustomScaffold(
       header: const AppHeader2(
         title: 'Esim',
-        showBack: false,
+        showBack: true,
       ),
       headerDesc: 'Purchase your T-mobile E-sims',
       child: Form(

@@ -9,6 +9,7 @@ import '../../core/config/color.constant.dart';
 class CustomInput extends HookWidget {
   final String? hintText;
   final void Function(String)? onChanged;
+  final dynamic Function(PhoneNumber)? onPhoneChanged;
   final TextEditingController? controller;
   final PhoneController? phoneController;
   final FocusNode? focusNode;
@@ -54,6 +55,7 @@ class CustomInput extends HookWidget {
     this.focusNode,
     this.nextFocus,
     this.validator,
+    this.onPhoneChanged,
     this.phoneErrorText = "Phone Number Is Required",
     this.textInputType,
     this.isEnable = true,
@@ -106,11 +108,7 @@ class CustomInput extends HookWidget {
               ),
               PhoneValidator.validMobile(context)
             ]),
-            onChanged: (phoneNumber) {
-              // phone.value = phoneNumber;
-              // print(phoneController.value);
-              // print('changed into $phoneNumber'),
-            },
+            onChanged: onPhoneChanged,
             enabled: true,
 
             isCountrySelectionEnabled: false,

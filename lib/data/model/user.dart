@@ -8,6 +8,7 @@ class User extends Equatable {
   final String email;
   final String apiKey;
   final num balance;
+  final num kyc;
   final String phoneNumber;
   final String? photo;
   final bool? b2fa;
@@ -28,6 +29,7 @@ class User extends Equatable {
     required this.username,
     required this.email,
     required this.apiKey,
+    required this.kyc,
     required this.balance,
     this.b2fa,
     this.hasPin,
@@ -41,7 +43,7 @@ class User extends Equatable {
 
   @override
   String toString() {
-    return 'User{id: $id, firstName: $firstName, lastName: $lastName, username: $username, email: $email, balance: $balance, b2fa: $b2fa, has_pin: $hasPin, is_verified: $isVerified, phone: $phoneNumber, photo: $photo}';
+    return 'User{id: $id, kyc: $kyc, firstName: $firstName, lastName: $lastName, username: $username, email: $email, balance: $balance, b2fa: $b2fa, has_pin: $hasPin, is_verified: $isVerified, phone: $phoneNumber, photo: $photo}';
   }
 
   User copyWith({
@@ -54,6 +56,7 @@ class User extends Equatable {
     String? phoneNumber,
     String? photo,
     num? balance,
+    num? kyc,
     bool? b2fa,
     bool? hasPin,
     bool? isVerified,
@@ -71,6 +74,7 @@ class User extends Equatable {
       email: email ?? this.email,
       apiKey: apiKey ?? this.apiKey,
       balance: balance ?? this.balance,
+      kyc: kyc ?? this.kyc,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       photo: photo ?? this.photo,
       b2fa: b2fa ?? this.b2fa,
@@ -93,6 +97,7 @@ class User extends Equatable {
       'email': email,
       'apiKey': apiKey,
       'balance': balance,
+      'kyc': kyc,
       'photo': photo,
       'phoneNumber': phoneNumber,
       'b2fa': b2fa,
@@ -115,6 +120,7 @@ class User extends Equatable {
       email: map['email'] as String,
       apiKey: map['api_key'] as String,
       balance: map['balance'] as num,
+      kyc: map['kyc'] as num,
       phoneNumber: map['phone_number'],
       photo: map['photo'],
       b2fa: map['2fa'] as bool,
@@ -138,6 +144,7 @@ class User extends Equatable {
         email,
         apiKey,
         balance,
+        kyc,
         phoneNumber,
         photo,
         b2fa,

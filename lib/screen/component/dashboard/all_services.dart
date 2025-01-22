@@ -10,6 +10,7 @@ import 'package:ionicons/ionicons.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
 import '../../../core/state/bloc/repo/app/app_bloc.dart';
+import '../../../data/model/user.dart';
 
 final cacheStore = MemCacheStore();
 final cacheOptions = CacheOptions(
@@ -36,6 +37,8 @@ class AllServices extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final User user = context.read<AppBloc>().state.user!;
+
     final List<Map<String, dynamic>> allServices = [
       {
         "icon": Ionicons.phone_portrait_outline,
@@ -61,10 +64,12 @@ class AllServices extends HookWidget {
         "desc": 'Top up prepaid electricity meter',
         "route": "/electricity"
       },
+    ];
+    final List<Map<String, dynamic>> allServices2 = [
       {
-        "icon": Ionicons.gift_outline,
-        "name": "Gift Card",
-        "route": "/gift-card"
+        "icon": Ionicons.logo_bitcoin,
+        "name": "Sell Crypto",
+        "route": user.kyc > 1 ? "/crypto" : "/user/kyc"
       },
       {
         "icon": Ionicons.extension_puzzle_outline,
@@ -99,91 +104,179 @@ class AllServices extends HookWidget {
         color: Colors.white,
       ),
       child: Center(
-        child: Wrap(
-          spacing: 30.0, // gap between adjacent chips
-          runSpacing: 14.0,
-          direction: Axis.horizontal,
-          verticalDirection: VerticalDirection.down,
-          runAlignment: WrapAlignment.spaceBetween,
+        child: Column(
           children: [
-            ...allServices.map(
-              (item) {
-                // final search = response.where((element) {
-                //   return element['field'] == element['name'];
-                // },);
-                final label = response.value.firstWhere(
-                  (element) {
-                    print(item['name'].toLowerCase());
-                    return element['title']?.toLowerCase() ==
-                        item['name'].toLowerCase();
-                  },
-                  orElse: () {
-                    return {};
-                  },
-                );
-                print(label);
-                if (label.isNotEmpty) {
-                  print(label);
-                }
-                return TouchableOpacity(
-                  onTap: () {
-                    context.go(item['route']);
-                  },
-                  child: Stack(
-                    children: [
-                      if (label.isNotEmpty)
-                        Positioned(
-                          right: 0,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.only(
-                                // bottomLeft: Radius.circular(5),
-                                bottomRight: Radius.circular(5),
-                                topRight: Radius.circular(5),
-                                topLeft: Radius.circular(5),
-                              ),
-                            ),
-                            width: 23,
-                            height: 13,
-                            child: Center(
-                              child: Text(
-                                label['details']!,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                maxLines: 1,
-                              ),
-                            ),
-                          ),
-                        ),
-                      Column(
+            Flex(
+              // spacing: 30.0,
+
+              // gap between adjacent chips
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              direction: Axis.horizontal,
+              children: [
+                ...allServices.map(
+                  (item) {
+                    final label = response.value.firstWhere(
+                      (element) {
+                        print(item['name'].toLowerCase());
+                        return element['title']?.toLowerCase() ==
+                            item['name'].toLowerCase();
+                      },
+                      orElse: () {
+                        return {};
+                      },
+                    );
+                    print(label);
+                    if (label.isNotEmpty) {
+                      print(label);
+                    }
+                    return TouchableOpacity(
+                      onTap: () {
+                        context.go(item['route']);
+                      },
+                      child: Stack(
                         children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: AppColor.primaryColor.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: Center(
-                              child: Icon(
-                                item['icon'],
-                                size: 30,
-                                color: AppColor.secondaryColor,
+                          if (label.isNotEmpty)
+                            Positioned(
+                              right: 0,
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.only(
+                                    // bottomLeft: Radius.circular(5),
+                                    bottomRight: Radius.circular(5),
+                                    topRight: Radius.circular(5),
+                                    topLeft: Radius.circular(5),
+                                  ),
+                                ),
+                                width: 23,
+                                height: 13,
+                                child: Center(
+                                  child: Text(
+                                    label['details']!,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 1,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                          Text(item['name']),
+                          Column(
+                            children: [
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: AppColor.primaryColor.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                child: Center(
+                                  child: Icon(
+                                    item['icon'],
+                                    size: 30,
+                                    color: AppColor.secondaryColor,
+                                  ),
+                                ),
+                              ),
+                              Text(item['name']),
+                            ],
+                          )
                         ],
-                      )
-                    ],
-                  ),
-                );
-              },
-            )
+                      ),
+                    );
+                  },
+                )
+              ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Flex(
+              // spacing: 30.0,
+
+              // gap between adjacent chips
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              direction: Axis.horizontal,
+              children: [
+                ...allServices2.map(
+                  (item) {
+                    final label = response.value.firstWhere(
+                      (element) {
+                        print(item['name'].toLowerCase());
+                        return element['title']?.toLowerCase() ==
+                            item['name'].toLowerCase();
+                      },
+                      orElse: () {
+                        return {};
+                      },
+                    );
+                    print(label);
+                    if (label.isNotEmpty) {
+                      print(label);
+                    }
+                    return TouchableOpacity(
+                      onTap: () {
+                        context.go(item['route']);
+                      },
+                      child: Stack(
+                        children: [
+                          if (label.isNotEmpty)
+                            Positioned(
+                              right: 0,
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.only(
+                                    // bottomLeft: Radius.circular(5),
+                                    bottomRight: Radius.circular(5),
+                                    topRight: Radius.circular(5),
+                                    topLeft: Radius.circular(5),
+                                  ),
+                                ),
+                                width: 23,
+                                height: 13,
+                                child: Center(
+                                  child: Text(
+                                    label['details']!,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 1,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          Column(
+                            children: [
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  color: AppColor.primaryColor.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                child: Center(
+                                  child: Icon(
+                                    item['icon'],
+                                    size: 30,
+                                    color: AppColor.secondaryColor,
+                                  ),
+                                ),
+                              ),
+                              Text(item['name']),
+                            ],
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                )
+              ],
+            ),
           ],
         ),
       ),

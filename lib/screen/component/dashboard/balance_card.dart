@@ -151,7 +151,11 @@ class BalanceCard extends HookWidget {
                           ),
                         ),
                         onPressed: () {
-                          context.go('/withdraw');
+                          if (state.user!.kyc > 1) {
+                            context.go('/withdraw');
+                          } else {
+                            context.go('/user/kyc');
+                          }
                         },
                         child: const Row(
                           crossAxisAlignment: CrossAxisAlignment.center,

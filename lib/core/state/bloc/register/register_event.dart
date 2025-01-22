@@ -9,6 +9,7 @@ class RegisterRequestEvent extends RegisterEvent {
   final String password;
   final String email;
   final String phone;
+  final String code;
 
   RegisterRequestEvent({
     required this.firstname,
@@ -17,5 +18,6 @@ class RegisterRequestEvent extends RegisterEvent {
     required this.password,
     required this.email,
     required this.phone,
+    required this.code,
   });
 }

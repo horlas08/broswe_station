@@ -13,6 +13,7 @@ import 'package:browse_station/screen/user/bills/esim/esim.dart';
 import 'package:browse_station/screen/user/bills/giftcard/gift_card.dart';
 import 'package:browse_station/screen/user/bills/status/sucessful/successful.dart';
 import 'package:browse_station/screen/user/confirm_page/confirm_transaction.dart';
+import 'package:browse_station/screen/user/crypto/crypto.dart';
 import 'package:browse_station/screen/user/deposit/account_details.dart';
 import 'package:browse_station/screen/user/deposit/deposit.dart';
 import 'package:browse_station/screen/user/preferences/user_preference.dart';
@@ -373,6 +374,16 @@ class AppRouter {
         name: "esim",
         builder: (context, state) {
           return const Esim();
+        },
+        redirect: (context, state) async {
+          return null;
+        },
+      ),
+      GoRoute(
+        path: "/crypto",
+        name: "crypto",
+        builder: (context, state) {
+          return const Crypto();
         },
         redirect: (context, state) async {
           return null;

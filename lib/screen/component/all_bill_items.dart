@@ -1,9 +1,12 @@
 import 'package:browse_station/core/config/color.constant.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
 import '../../core/config/font.constant.dart';
+import '../../core/state/bloc/repo/app/app_bloc.dart';
+import '../../data/model/user.dart';
 import 'dashboard/all_services.dart';
 
 class AllBillItems extends HookWidget {
@@ -12,6 +15,7 @@ class AllBillItems extends HookWidget {
   final IconData icon;
   final IconData? arrow;
   final VoidCallback onTap;
+
   const AllBillItems(
       {super.key,
       required this.name,
@@ -23,6 +27,7 @@ class AllBillItems extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final response = useState([]);
+    final User user = context.read<AppBloc>().state.user!;
 
     useEffect(() {
       getLabel(context).then(

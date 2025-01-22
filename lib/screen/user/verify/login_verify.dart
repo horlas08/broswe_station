@@ -107,9 +107,6 @@ class LoginVerify extends HookWidget {
           appBar: AppHeader(
             title: 'Unique Pin',
             onpress: () {
-              // var appBox = Hive.box("appBox");
-              // appBox.clear();
-              // context.go("/login");
               showAppDialog(
                 context,
                 child: Padding(

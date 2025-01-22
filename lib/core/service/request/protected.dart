@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:browse_station/core/config/app.constant.dart';
 import 'package:browse_station/data/model/betting_providers.dart';
+import 'package:browse_station/data/model/crypto_info.dart';
 import 'package:browse_station/data/model/epin_providers.dart';
 import 'package:browse_station/data/model/esim.dart';
 import 'package:browse_station/data/model/portraitcuts.dart';
@@ -284,6 +285,50 @@ Future<List<ElectricityProviders>> getMeterLocationRequest(
     }
   }
   return [];
+}
+
+Future<List<CryptoInfo>> getAvailableCryptoRequest(BuildContext context) async {
+  // context.loaderOverlay.show();
+  final res = await dio.get(
+    getAvailableCrypto,
+    options: Options(
+      headers: {
+        'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
+      },
+    ),
+  );
+  print(res.statusCode);
+  if (context.mounted) {
+    // context.loaderOverlay.hide();
+    if (res.statusCode == HttpStatus.ok || res.statusCode == 304) {
+      print(res);
+      final cryptoList = CryptoInfo.fromJsonList(res.data['data']);
+      print(cryptoList);
+      return cryptoList;
+    } else {
+      return [];
+    }
+  }
+  return [];
+}
+
+Future<Response> buyCryptoRequest(
+  BuildContext context, {
+  required FormData formData,
+}) async {
+  final res = await dio.post(
+    postSellCrypto,
+    data: formData,
+    options: Options(
+      contentType: Headers.multipartFormDataContentType,
+      headers: {
+        Headers.contentTypeHeader: Headers.multipartFormDataContentType,
+        'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
+      },
+    ),
+  );
+
+  return res;
 }
 
 Future<Response> buyMeterRequest(
@@ -779,19 +824,19 @@ Future<List<EsimModel>> getEsimRequest(
 Future handleKycRequest(
   BuildContext context, {
   required String bvn,
-  required String accountNumber,
-  required String bankCode,
+  required String nin,
+  required String dob,
 }) async {
   try {
     context.loaderOverlay.show();
 
     var appBox = Hive.box('appBox');
     final resp = await dio.post(
-      kyc,
+      kycLevel,
       data: {
         "bvn": bvn,
-        "bank_code": bankCode,
-        "account_no": accountNumber,
+        "nin": nin,
+        "dob": dob,
       },
       options: Options(
         headers: {

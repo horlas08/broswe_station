@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:browse_station/core/helper/helper.dart';
 import 'package:browse_station/core/state/cubic/app_config_cubit.dart';
@@ -9,11 +11,15 @@ import 'package:form_validator/form_validator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:phone_form_field/phone_form_field.dart';
+import 'package:timer_count_down/timer_controller.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 import 'package:toastification/toastification.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
+import '../../../core/config/app.constant.dart';
 import '../../../core/config/color.constant.dart';
 import '../../../core/config/string.constant.dart';
+import '../../../core/service/http.dart';
 import '../../../core/state/bloc/register/register_bloc.dart';
 import '../../../core/state/bloc/register/register_event.dart';
 import '../../../core/state/bloc/register/register_state.dart';
@@ -25,6 +31,8 @@ final _formKey = GlobalKey<FormState>();
 final phoneController = PhoneController(
   initialValue: const PhoneNumber(isoCode: IsoCode.NG, nsn: ''),
 );
+final timeController = CountdownController();
+
 class Register extends HookWidget {
   const Register({super.key});
 
@@ -35,6 +43,7 @@ class Register extends HookWidget {
     final firstNameController = useTextEditingController();
     final lastNameController = useTextEditingController();
     final usernameController = useTextEditingController();
+    final verificationFieldController = useTextEditingController();
     final confirmPasswordController = useTextEditingController();
 
     final enableButton = useState<bool>(false);
@@ -42,6 +51,39 @@ class Register extends HookWidget {
     void _handleFormChange() {
       print('i run');
       enableButton.value = _formKey.currentState!.validate() ?? true;
+    }
+
+    final ValueNotifier<bool> timeCount = useState(false);
+    final ValueNotifier<bool> phoneValid = useState(false);
+    final ValueNotifier<bool> smsRequestPending = useState(false);
+    Future<void> sendOtpToPhone(BuildContext context) async {
+      smsRequestPending.value = true;
+      final res = await dio.post(sendSms,
+          data: {'phonenumber': "0${phoneController.value.nsn}"});
+      print(res);
+      smsRequestPending.value = false;
+      if (res.statusCode == HttpStatus.ok) {
+        timeCount.value = true;
+        timeController.restart();
+        if (context.mounted) {
+          showToast(
+            context,
+            title: 'success',
+            desc: res.data['message'],
+            type: ToastificationType.success,
+          );
+        }
+      } else {
+        timeCount.value = false;
+        if (context.mounted) {
+          showToast(
+            context,
+            title: 'error',
+            desc: res.data['message'],
+            type: ToastificationType.error,
+          );
+        }
+      }
     }
 
     return BlocConsumer<RegisterBloc, RegisterState>(
@@ -55,10 +97,12 @@ class Register extends HookWidget {
           print("register suucessfully");
           _formKey.currentState?.reset();
           context.loaderOverlay.hide();
-          showToast(context,
-              title: "Registration Successful",
-              desc: state.message,
-              type: ToastificationType.success);
+          showToast(
+            context,
+            title: "Registration Successful",
+            desc: state.message,
+            type: ToastificationType.success,
+          );
 
           if (context.mounted) {
             // context.read<AppConfigCubit>().changeOnboardStatus(true);
@@ -156,8 +200,78 @@ class Register extends HookWidget {
                               labelText: "Phone Number",
                               isPhone: true,
                               needLabel: true,
+                              onPhoneChanged: (phone) {
+                                if (phone.isValid() && phone.isValidLength()) {
+                                  phoneValid.value = true;
+                                } else {
+                                  phoneValid.value = false;
+                                }
+                              },
+                              suffixIcon: phoneValid.value
+                                  ? SizedBox(
+                                      height: 7,
+                                      width: 55,
+                                      child: TextButton(
+                                        onPressed: !timeCount.value
+                                            ? () async {
+                                                if (!timeCount.value) {
+                                                  await sendOtpToPhone(context);
+                                                }
+                                              }
+                                            : null,
+                                        child: timeCount.value
+                                            ? Countdown(
+                                                seconds: 60,
+                                                build: (BuildContext context,
+                                                        double time) =>
+                                                    Text(
+                                                  time.toString(),
+                                                  // style: TextStyle(
+                                                  //   fontSize: 4,
+                                                  //   color: Colors.black,
+                                                  // ),
+                                                ),
+                                                interval:
+                                                    const Duration(seconds: 1),
+                                                // controller:
+                                                //     timeController,
+                                                onFinished: () {
+                                                  timeCount.value = false;
+
+                                                  print('Timer is done!');
+                                                },
+                                              )
+                                            : smsRequestPending.value
+                                                ? const Center(
+                                                    child: SizedBox(
+                                                      height: 10,
+                                                      width: 10,
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        color: AppColor
+                                                            .primaryColor,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : const Text(
+                                                    "Get Codes",
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 12,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                      ),
+                                    )
+                                  : null,
                               phoneController: phoneController,
                               hintText: "9014876757",
+                            ),
+                            CustomInput(
+                              labelText: "Verification Code",
+                              validator: ValidationBuilder().required().build(),
+                              controller: verificationFieldController,
                             ),
                             CustomInput(
                               labelText: "Email Address",
@@ -262,6 +376,9 @@ class Register extends HookWidget {
                                                     usernameController.text,
                                                 phone:
                                                     "0${phoneController.value.nsn}",
+                                                code:
+                                                    verificationFieldController
+                                                        .text,
                                               ),
                                             );
                                       } else {
@@ -279,7 +396,7 @@ class Register extends HookWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
-                          "Aleady have an account?",
+                          "Already have an account?",
                           style: TextStyle(
                             fontSize: 15,
                           ),

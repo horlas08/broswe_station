@@ -27,6 +27,12 @@ class Deposit extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
+          Text(
+            'In line with CBN, a NGN50 charge applies to deposits made to the account provided for you.',
+          ),
+          const SizedBox(
+            height: 20,
+          ),
           ListCard(
             name: "Monnify Account",
             desc: "View your monnify account details",

@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:browse_station/core/config/color.constant.dart';
 import 'package:browse_station/core/helper/helper.dart';
 import 'package:browse_station/screen/component/app_header2.dart';
@@ -9,16 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:form_validator/form_validator.dart';
-import 'package:ionicons/ionicons.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:remixicon/remixicon.dart';
 
-import '../../../core/config/app.constant.dart';
 import '../../../core/service/request/protected.dart';
 import '../../../core/state/bloc/repo/app/app_bloc.dart';
 import '../../../core/state/bloc/repo/app/app_state.dart';
 import '../../../data/model/bank.dart';
 import '../../component/button.dart';
+import '../../component/transaction_item.dart';
 
 final _dropDownBankKycListKey = GlobalKey<DropdownSearchState<Bank>>();
 
@@ -29,12 +26,14 @@ class Kyc extends HookWidget {
   Widget build(BuildContext context) {
     final kycKey = GlobalKey<FormState>();
     final bvnController = useTextEditingController();
+    final dobController = useTextEditingController();
+    final ValueNotifier<String?> dob = useState(null);
     final ValueNotifier<Bank?> selectedBank = useState(null);
     final TextEditingController accountNameController =
         useTextEditingController();
     final ValueNotifier<bool> dataIsLoading = useState(false);
 
-    final TextEditingController accountNumberController =
+    final TextEditingController ninController =
         useTextEditingController(text: '');
     final FocusNode accountNumberFocus = useFocusNode();
     final ValueNotifier<List<Bank>> bankList = useState([]);
@@ -87,182 +86,180 @@ class Kyc extends HookWidget {
                     if (!(state.accounts!.length > 1))
                       Column(
                         children: [
-                          const Text(
-                            "Select Bank",
-                            style: TextStyle(
-                              color: AppColor.greyLightColor,
-                              height: 1.2,
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          DropdownSearch<Bank>(
-                            items: (filter, infiniteScrollProps) =>
-                                bankList.value,
-                            compareFn: (item, selectedItem) {
-                              return item.code == selectedItem.code;
-                            },
-
-                            selectedItem: selectedBank.value,
-                            key: _dropDownBankKycListKey,
-                            popupProps: PopupProps.modalBottomSheet(
-                              // disabledItemFn: (item) => item.id == 'Item 3',
-                              fit: FlexFit.loose,
-                              showSearchBox: true,
-                              title: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 28.0),
-                                  child: AutoSizeText(
-                                    "Bank List".toUpperCase(),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                    maxLines: 1,
-                                  ),
-                                ),
-                              ),
-                              containerBuilder: (context, popupWidget) {
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 15),
-                                  child: popupWidget,
-                                );
-                              },
-
-                              disabledItemFn: (item) {
-                                return false;
-                              },
-                              itemBuilder:
-                                  (context, item, isDisabled, isSelected) {
-                                return Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(item.name!,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          Spacer(),
-                                          if (_dropDownBankKycListKey
-                                                  .currentState
-                                                  ?.getSelectedItem !=
-                                              null)
-                                            if (_dropDownBankKycListKey
-                                                    .currentState
-                                                    ?.getSelectedItem
-                                                    ?.code ==
-                                                item.code)
-                                              const Icon(
-                                                Ionicons.checkmark,
-                                                color: AppColor.primaryColor,
-                                              )
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      const Divider()
-                                    ],
-                                  ),
-                                );
-                              },
-                              searchFieldProps: const TextFieldProps(
-                                decoration: InputDecoration(
-                                  suffixIcon: Icon(Ionicons.search),
-                                  hintText: 'Search here',
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: 15, horizontal: 14),
-                                ),
-                              ),
-                            ),
-                            onBeforePopupOpening: (selectedItem) async {
-                              if (bankList.value.isEmpty) {
-                                await getBankListRequest(context,
-                                        path: getBankKycList)
-                                    .then(
-                                  (value) {
-                                    bankList.value = value;
-                                    _dropDownBankKycListKey.currentState
-                                        ?.openDropDownSearch();
-                                  },
-                                ).onError(
-                                  (error, stackTrace) {
-                                    if (context.mounted) {
-                                      context.loaderOverlay.hide();
-                                      showToast(context,
-                                          title: "error",
-                                          desc: error.toString());
-                                    }
-                                  },
-                                );
-
-                                return false;
-                              }
-                              return null;
-                            },
-                            validator: (value) {
-                              if (value == null) {
-                                return 'required';
-                              }
-                              return null;
-                            },
-                            suffixProps: DropdownSuffixProps(
-                              dropdownButtonProps: DropdownButtonProps(
-                                color: AppColor.primaryColor,
-                                iconClosed: !dataIsLoading.value
-                                    ? const Icon(
-                                        Ionicons.chevron_down_outline,
-                                        size: 24,
-                                      )
-                                    : const SizedBox(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator()),
-                              ),
-                            ),
-
-                            onChanged: (value) {
-                              print(_dropDownBankKycListKey
-                                  .currentState?.getSelectedItem?.name);
-                              selectedBank.value = value;
-                            },
-
-                            // mode: Mode.form,
-                            decoratorProps: const DropDownDecoratorProps(
-                              decoration: InputDecoration(
-                                hintText: "Select Bank",
-                                isCollapsed: false,
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 15, horizontal: 14),
-                              ),
-                            ),
-
-                            itemAsString: (item) {
-                              return "${item.name}";
-                            },
-
-                            // enabled: selectedPlan.value.isNotEmpty,
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
+                          // const Text(
+                          //   "Select Bank",
+                          //   style: TextStyle(
+                          //     color: AppColor.greyLightColor,
+                          //     height: 1.2,
+                          //   ),
+                          // ),
+                          // const SizedBox(
+                          //   height: 10,
+                          // ),
+                          // DropdownSearch<Bank>(
+                          //   items: (filter, infiniteScrollProps) =>
+                          //       bankList.value,
+                          //   compareFn: (item, selectedItem) {
+                          //     return item.code == selectedItem.code;
+                          //   },
+                          //
+                          //   selectedItem: selectedBank.value,
+                          //   key: _dropDownBankKycListKey,
+                          //   popupProps: PopupProps.modalBottomSheet(
+                          //     // disabledItemFn: (item) => item.id == 'Item 3',
+                          //     fit: FlexFit.loose,
+                          //     showSearchBox: true,
+                          //     title: Center(
+                          //       child: Padding(
+                          //         padding: const EdgeInsets.symmetric(
+                          //             vertical: 28.0),
+                          //         child: AutoSizeText(
+                          //           "Bank List".toUpperCase(),
+                          //           style: const TextStyle(
+                          //               fontWeight: FontWeight.bold,
+                          //               fontSize: 20),
+                          //           maxLines: 1,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     containerBuilder: (context, popupWidget) {
+                          //       return Container(
+                          //         padding: const EdgeInsets.symmetric(
+                          //             horizontal: 15),
+                          //         child: popupWidget,
+                          //       );
+                          //     },
+                          //
+                          //     disabledItemFn: (item) {
+                          //       return false;
+                          //     },
+                          //     itemBuilder:
+                          //         (context, item, isDisabled, isSelected) {
+                          //       return Container(
+                          //         margin: const EdgeInsets.symmetric(
+                          //             horizontal: 10, vertical: 10),
+                          //         child: Column(
+                          //           children: [
+                          //             Row(
+                          //               children: [
+                          //                 Text(item.name!,
+                          //                     style: const TextStyle(
+                          //                       fontWeight: FontWeight.bold,
+                          //                     )),
+                          //                 Spacer(),
+                          //                 if (_dropDownBankKycListKey
+                          //                         .currentState
+                          //                         ?.getSelectedItem !=
+                          //                     null)
+                          //                   if (_dropDownBankKycListKey
+                          //                           .currentState
+                          //                           ?.getSelectedItem
+                          //                           ?.code ==
+                          //                       item.code)
+                          //                     const Icon(
+                          //                       Ionicons.checkmark,
+                          //                       color: AppColor.primaryColor,
+                          //                     )
+                          //               ],
+                          //             ),
+                          //             const SizedBox(
+                          //               height: 5,
+                          //             ),
+                          //             const Divider()
+                          //           ],
+                          //         ),
+                          //       );
+                          //     },
+                          //     searchFieldProps: const TextFieldProps(
+                          //       decoration: InputDecoration(
+                          //         suffixIcon: Icon(Ionicons.search),
+                          //         hintText: 'Search here',
+                          //         contentPadding: EdgeInsets.symmetric(
+                          //             vertical: 15, horizontal: 14),
+                          //       ),
+                          //     ),
+                          //   ),
+                          //   onBeforePopupOpening: (selectedItem) async {
+                          //     if (bankList.value.isEmpty) {
+                          //       await getBankListRequest(context,
+                          //               path: getBankKycList)
+                          //           .then(
+                          //         (value) {
+                          //           bankList.value = value;
+                          //           _dropDownBankKycListKey.currentState
+                          //               ?.openDropDownSearch();
+                          //         },
+                          //       ).onError(
+                          //         (error, stackTrace) {
+                          //           if (context.mounted) {
+                          //             context.loaderOverlay.hide();
+                          //             showToast(context,
+                          //                 title: "error",
+                          //                 desc: error.toString());
+                          //           }
+                          //         },
+                          //       );
+                          //
+                          //       return false;
+                          //     }
+                          //     return null;
+                          //   },
+                          //   validator: (value) {
+                          //     if (value == null) {
+                          //       return 'required';
+                          //     }
+                          //     return null;
+                          //   },
+                          //   suffixProps: DropdownSuffixProps(
+                          //     dropdownButtonProps: DropdownButtonProps(
+                          //       color: AppColor.primaryColor,
+                          //       iconClosed: !dataIsLoading.value
+                          //           ? const Icon(
+                          //               Ionicons.chevron_down_outline,
+                          //               size: 24,
+                          //             )
+                          //           : const SizedBox(
+                          //               height: 20,
+                          //               width: 20,
+                          //               child: CircularProgressIndicator()),
+                          //     ),
+                          //   ),
+                          //
+                          //   onChanged: (value) {
+                          //     print(_dropDownBankKycListKey
+                          //         .currentState?.getSelectedItem?.name);
+                          //     selectedBank.value = value;
+                          //   },
+                          //
+                          //   // mode: Mode.form,
+                          //   decoratorProps: const DropDownDecoratorProps(
+                          //     decoration: InputDecoration(
+                          //       hintText: "Select Bank",
+                          //       isCollapsed: false,
+                          //       contentPadding: EdgeInsets.symmetric(
+                          //           vertical: 15, horizontal: 14),
+                          //     ),
+                          //   ),
+                          //
+                          //   itemAsString: (item) {
+                          //     return "${item.name}";
+                          //   },
+                          //
+                          //   // enabled: selectedPlan.value.isNotEmpty,
+                          // ),
+                          // const SizedBox(
+                          //   height: 20,
+                          // ),
                           CustomInput(
-                            labelText: 'Account Number',
+                            labelText: 'NIN Number',
                             isPhone: false,
-                            maxLength: 10,
-                            controller: accountNumberController,
-                            hintText: "Account Number",
+                            controller: ninController,
+                            hintText: "Your NIN Number",
                             focusNode: accountNumberFocus,
                             textInputType: TextInputType.numberWithOptions(),
                             validator: ValidationBuilder()
                                 .required()
                                 .minLength(10)
-                                .maxLength(10)
                                 .build(),
                           ),
                           CustomInput(
@@ -275,20 +272,53 @@ class Kyc extends HookWidget {
                                 .build(),
                             hintText: "Enter Your 11 digit Bvn Here",
                           ),
+                          CustomInput(
+                            labelText: "Date Of Birth",
+                            controller: dobController,
+                            readOnly: state.accounts!.length > 1,
+                            validator: ValidationBuilder().required().build(),
+                            hintText: "",
+                            suffixIcon: IconButton(
+                              onPressed: () async {
+                                final res = await showDatePicker(
+                                  context: context,
+                                  firstDate: DateTime.utc(1888),
+                                  lastDate: DateTime.now(),
+                                );
+                                if (context.mounted) {
+                                  if (res != null) {
+                                    DateTime selectedDateTime = DateTime(
+                                      res.year,
+                                      res.month,
+                                      res.day,
+                                    );
+                                    dob.value =
+                                        selectedDateTime.toIso8601String();
+                                    dobController.text =
+                                        getDateAndYearWordFromString(
+                                            selectedDateTime.toString());
+                                  }
+                                }
+                              },
+                              icon: Icon(
+                                Icons.calendar_month_rounded,
+                                color: AppColor.primaryColor,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     Button(
-                        text: state.accounts!.length > 1
-                            ? "Kyc Verified"
-                            : "Enroll Now",
-                        press: state.accounts!.length > 1
+                        text:
+                            state.user!.kyc > 1 ? "Kyc Verified" : "Enroll Now",
+                        press: state.user!.kyc > 1
                             ? null
                             : () async {
                                 if (kycKey.currentState!.validate()) {
                                   await handleKycRequest(
                                     context,
-                                    accountNumber: accountNumberController.text,
-                                    bankCode: selectedBank.value!.code!,
+                                    nin: ninController.text,
+                                    dob: dob.value!,
                                     bvn: bvnController.text,
                                   );
                                 } else {
