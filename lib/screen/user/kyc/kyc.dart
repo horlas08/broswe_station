@@ -83,7 +83,7 @@ class Kyc extends HookWidget {
                 print(state.accounts?.length);
                 return Column(
                   children: [
-                    if (!(state.accounts!.length > 1))
+                    if (!(state.user!.kyc > 1))
                       Column(
                         children: [
                           // const Text(
