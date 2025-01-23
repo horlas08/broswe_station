@@ -734,12 +734,12 @@ refreshUserDetails(BuildContext context, {bool showLoading = true}) async {
     }
   } on DioException catch (err) {
     if (showLoading) context.loaderOverlay.hide();
-    showToast(context,
-        title: "error", desc: 'Refresh failed', type: ToastificationType.error);
+    // showToast(context,
+    //     title: "error", desc: 'Refresh failed', type: ToastificationType.error);
   } on Exception catch (err) {
     if (showLoading) context.loaderOverlay.hide();
-    showToast(context,
-        title: "error", desc: 'Refresh failed', type: ToastificationType.error);
+    // showToast(context,
+    //     title: "error", desc: 'Refresh failed', type: ToastificationType.error);
   }
 }
 

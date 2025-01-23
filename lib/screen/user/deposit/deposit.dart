@@ -35,7 +35,7 @@ class Deposit extends StatelessWidget {
             height: 20,
           ),
           ListCard(
-            name: "Monnify Account",
+            name: "MoniePoint & WEMA",
             desc: "View your monnify account details",
             icon: Remix.bank_line,
             margin: EdgeInsets.zero,
@@ -45,13 +45,13 @@ class Deposit extends StatelessWidget {
                   'account number': accounts![0].accountNumber.toString(),
                   'account name': accounts[0].accountName.toString(),
                   'bank name': accounts[0].bankName.toString(),
-                  'type': "Monnify",
+                  // 'type': "Monnify",
                 },
                 {
                   'account number': accounts[1].accountNumber.toString(),
                   'account name': accounts[1].accountName.toString(),
                   'bank name': accounts[1].bankName.toString(),
-                  'type': "Monnify",
+                  // 'type': "Monnify",
                 },
               ];
               context.pushNamed("myAccount", extra: account);
@@ -75,7 +75,7 @@ class Deposit extends StatelessWidget {
                   'account number': accounts![2].accountNumber.toString(),
                   'account name': accounts[2].accountName.toString(),
                   'bank name': accounts[2].bankName.toString(),
-                  'type': "9PSB",
+                  // 'type': "9PSB",
                 }
               ];
               context.pushNamed("myAccount", extra: account);

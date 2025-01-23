@@ -39,7 +39,7 @@ class Kyc extends HookWidget {
     final ValueNotifier<List<Bank>> bankList = useState([]);
 
     return CustomScaffold(
-      header: const AppHeader2(title: "Upgrade Kyc"),
+      header: const AppHeader2(title: "Upgrade Account"),
       child: Form(
         key: kycKey,
         child: Column(
@@ -264,6 +264,7 @@ class Kyc extends HookWidget {
                           ),
                           CustomInput(
                             labelText: "Bvn",
+                            textInputType: TextInputType.numberWithOptions(),
                             controller: bvnController,
                             validator: ValidationBuilder()
                                 .required()

@@ -101,8 +101,8 @@ class ProfileHeader extends StatelessWidget {
                                 ),
                                 TextSpan(
                                     text: state.user!.kyc > 1
-                                        ? " KYC LEVEL 2"
-                                        : "KYC LEVEL 1"),
+                                        ? "LEVEL 2"
+                                        : "LEVEL 1"),
                               ]),
                           style: const TextStyle(
                               fontWeight: FontWeight.normal,
