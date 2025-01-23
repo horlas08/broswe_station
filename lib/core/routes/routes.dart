@@ -394,7 +394,7 @@ class AppRouter {
         name: "myAccount",
         builder: (context, state) {
           return AccountDetails(
-            accountDetail: state.extra as Map<String, String>,
+            accountDetail: state.extra as List<Map<String, String>>,
           );
         },
         redirect: (context, state) async {

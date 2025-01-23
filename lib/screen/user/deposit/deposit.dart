@@ -14,6 +14,7 @@ class Deposit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accounts = context.read<AppBloc>().state.accounts;
+    final user = context.read<AppBloc>().state.user;
 
     return CustomScaffold(
       header: AppHeader2(title: "Deposit Method"),
@@ -39,12 +40,20 @@ class Deposit extends StatelessWidget {
             icon: Remix.bank_line,
             margin: EdgeInsets.zero,
             onTap: () {
-              final Map<String, String> account = {
-                'account number': accounts![0].accountNumber.toString(),
-                'account name': accounts[0].accountName.toString(),
-                'bank name': accounts[0].bankName.toString(),
-                'type': "Monnify",
-              };
+              final List<Map<String, String>> account = [
+                {
+                  'account number': accounts![0].accountNumber.toString(),
+                  'account name': accounts[0].accountName.toString(),
+                  'bank name': accounts[0].bankName.toString(),
+                  'type': "Monnify",
+                },
+                {
+                  'account number': accounts[1].accountNumber.toString(),
+                  'account name': accounts[1].accountName.toString(),
+                  'bank name': accounts[1].bankName.toString(),
+                  'type': "Monnify",
+                },
+              ];
               context.pushNamed("myAccount", extra: account);
             },
           ),
@@ -57,16 +66,18 @@ class Deposit extends StatelessWidget {
             icon: Remix.bank_line,
             margin: EdgeInsets.zero,
             onTap: () {
-              if (accounts!.length < 2) {
+              if (user!.kyc < 2) {
                 context.pushNamed("kyc");
                 return;
               }
-              final Map<String, String> account = {
-                'account number': accounts[1].accountNumber.toString(),
-                'account name': accounts[1].accountName.toString(),
-                'bank name': accounts[1].bankName.toString(),
-                'type': "9PSB",
-              };
+              final List<Map<String, String>> account = [
+                {
+                  'account number': accounts![2].accountNumber.toString(),
+                  'account name': accounts[2].accountName.toString(),
+                  'bank name': accounts[2].bankName.toString(),
+                  'type': "9PSB",
+                }
+              ];
               context.pushNamed("myAccount", extra: account);
             },
           ),
