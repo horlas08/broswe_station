@@ -265,7 +265,6 @@ class Kyc extends HookWidget {
                           CustomInput(
                             labelText: "Bvn",
                             controller: bvnController,
-                            readOnly: state.accounts!.length > 1,
                             validator: ValidationBuilder()
                                 .required()
                                 .minLength(11)
@@ -275,7 +274,7 @@ class Kyc extends HookWidget {
                           CustomInput(
                             labelText: "Date Of Birth",
                             controller: dobController,
-                            readOnly: state.accounts!.length > 1,
+                            readOnly: true,
                             validator: ValidationBuilder().required().build(),
                             hintText: "",
                             suffixIcon: IconButton(

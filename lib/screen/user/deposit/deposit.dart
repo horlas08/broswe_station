@@ -62,7 +62,7 @@ class Deposit extends StatelessWidget {
                 return;
               }
               final Map<String, String> account = {
-                'account number': accounts![1].accountNumber.toString(),
+                'account number': accounts[1].accountNumber.toString(),
                 'account name': accounts[1].accountName.toString(),
                 'bank name': accounts[1].bankName.toString(),
                 'type': "9PSB",
