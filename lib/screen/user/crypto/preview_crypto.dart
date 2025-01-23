@@ -206,11 +206,12 @@ class PreviewCrypto extends HookWidget {
                 width: double.infinity,
                 height: 150,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: AppColor.primaryColor,
-                      style: BorderStyle.solid,
-                    )),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: AppColor.primaryColor,
+                    style: BorderStyle.solid,
+                  ),
+                ),
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -228,7 +229,7 @@ class PreviewCrypto extends HookWidget {
                               color: AppColor.primaryColor,
                               size: 64,
                             ),
-                            Text("Upload Prove Of Send")
+                            Text("Upload Proof")
                           ],
                         )
                       else

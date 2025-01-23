@@ -37,7 +37,7 @@ class Crypto extends HookWidget {
 
     return CustomScaffold(
       header: const AppHeader2(
-        title: 'BUY CRYPTO',
+        title: 'SELL CRYPTO',
         showBack: true,
       ),
       child: Form(
@@ -157,6 +157,8 @@ class Crypto extends HookWidget {
                       showModalBottomSheet(
                         context: context,
                         isDismissible: false,
+                        isScrollControlled: true,
+                        enableDrag: false,
                         builder: (context) {
                           return PreviewCrypto(
                             selectedCrypto: selectedCrypto.value,
