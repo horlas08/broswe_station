@@ -16,7 +16,7 @@ class AccountDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      header: AppHeader2(title: "My ${accountDetail[0]['type']} Account"),
+      header: AppHeader2(title: "Account Details"),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

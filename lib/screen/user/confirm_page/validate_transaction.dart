@@ -31,6 +31,7 @@ final _formKey = GlobalKey<FormState>();
 class ValidateTransaction extends HookWidget {
   final Function callback;
   final Map<String, String> data;
+
   const ValidateTransaction({
     super.key,
     required this.callback,
@@ -103,6 +104,7 @@ class ValidateTransaction extends HookWidget {
                     labelText: "",
                     hintText: '4 digit pin',
                     autofocus: true,
+                    maxLength: 4,
                     showCursor: true,
                     controller: pinController,
                     validator: ValidationBuilder()

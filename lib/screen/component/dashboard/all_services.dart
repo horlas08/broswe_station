@@ -23,7 +23,11 @@ Future<Response<dynamic>> getLabel(BuildContext context) async {
     '/services/get-labels',
     options: Options(
       headers: {
-        'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
+        'Authorization': "Bearer ${context
+            .read<AppBloc>()
+            .state
+            .user
+            ?.apiKey}"
       },
       extra: cacheOptions.toExtra(),
     ),
@@ -37,7 +41,10 @@ class AllServices extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final User user = context.read<AppBloc>().state.user!;
+    final User user = context
+        .read<AppBloc>()
+        .state
+        .user!;
 
     final List<Map<String, dynamic>> allServices = [
       {
@@ -54,7 +61,7 @@ class AllServices extends HookWidget {
       },
       {
         "icon": Ionicons.tv,
-        "name": "Tv",
+        "name": "Cable",
         "desc": 'Pay for cable tv subscription',
         "route": "/cable"
       },
@@ -87,7 +94,7 @@ class AllServices extends HookWidget {
     useEffect(() {
       if (response.value.isEmpty) {
         getLabel(context).then(
-          (value) {
+              (value) {
             response.value = value.data['data'];
           },
         );
@@ -114,9 +121,9 @@ class AllServices extends HookWidget {
               direction: Axis.horizontal,
               children: [
                 ...allServices.map(
-                  (item) {
+                      (item) {
                     final label = response.value.firstWhere(
-                      (element) {
+                          (element) {
                         print(item['name'].toLowerCase());
                         return element['title']?.toLowerCase() ==
                             item['name'].toLowerCase();
@@ -201,9 +208,9 @@ class AllServices extends HookWidget {
               direction: Axis.horizontal,
               children: [
                 ...allServices2.map(
-                  (item) {
+                      (item) {
                     final label = response.value.firstWhere(
-                      (element) {
+                          (element) {
                         print(item['name'].toLowerCase());
                         return element['title']?.toLowerCase() ==
                             item['name'].toLowerCase();
