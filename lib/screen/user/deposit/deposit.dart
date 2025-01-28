@@ -15,7 +15,7 @@ class Deposit extends StatelessWidget {
   Widget build(BuildContext context) {
     final accounts = context.read<AppBloc>().state.accounts;
     final user = context.read<AppBloc>().state.user;
-
+    print(accounts);
     return CustomScaffold(
       header: AppHeader2(title: "Deposit Method"),
       child: Column(
@@ -35,7 +35,7 @@ class Deposit extends StatelessWidget {
             height: 20,
           ),
           ListCard(
-            name: "MoniePoint & WEMA",
+            name: "MoniePoint",
             desc: "View your monnify account details",
             icon: Remix.bank_line,
             margin: EdgeInsets.zero,
@@ -46,13 +46,7 @@ class Deposit extends StatelessWidget {
                   'account name': accounts[0].accountName.toString(),
                   'bank name': accounts[0].bankName.toString(),
                   // 'type': "Monnify",
-                },
-                {
-                  'account number': accounts[1].accountNumber.toString(),
-                  'account name': accounts[1].accountName.toString(),
-                  'bank name': accounts[1].bankName.toString(),
-                  // 'type': "Monnify",
-                },
+                }
               ];
               context.pushNamed("myAccount", extra: account);
             },

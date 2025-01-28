@@ -380,7 +380,7 @@ Future<List<BettingProviders>> getbettingBillersRequest(
     }
   }
   return [];
-}
+}yy
 
 Future<Response> buyBettingRequest(
   BuildContext context, {
@@ -874,6 +874,12 @@ Future handleKycRequest(
     if (context.mounted) {
       context.loaderOverlay.hide();
       showToast(context, title: "error", desc: error.response?.data['message']);
+      return;
+    }
+  } on Exception catch (error) {
+    if (context.mounted) {
+      context.loaderOverlay.hide();
+      showToast(context, title: "error", desc: error.toString());
       return;
     }
   }
