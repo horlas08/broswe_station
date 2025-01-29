@@ -19,8 +19,8 @@ workflows:
           shorebird --version
           flutter pub get
           cd ios
-          pod install
           pod repo update
+          pod install
           cd ..
           shorebird --version
           shorebird release ios --no-codesign
