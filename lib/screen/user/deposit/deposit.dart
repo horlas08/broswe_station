@@ -60,15 +60,11 @@ class Deposit extends StatelessWidget {
             icon: Remix.bank_line,
             margin: EdgeInsets.zero,
             onTap: () {
-              // if (user!.kyc < 2) {
-              //   context.pushNamed("kyc");
-              //   return;
-              // }
               final List<Map<String, String>> account = [
                 {
-                  'account number': accounts![2].accountNumber.toString(),
-                  'account name': accounts[2].accountName.toString(),
-                  'bank name': accounts[2].bankName.toString(),
+                  'account number': accounts![1].accountNumber.toString(),
+                  'account name': accounts[1].accountName.toString(),
+                  'bank name': accounts[1].bankName.toString(),
                   // 'type': "9PSB",
                 }
               ];
