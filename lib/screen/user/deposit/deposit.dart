@@ -56,14 +56,14 @@ class Deposit extends StatelessWidget {
           ),
           ListCard(
             name: "9PSB Account",
-            desc: "View your 9PSB account (kyc require)",
+            desc: "View your 9 Payment service bank account ",
             icon: Remix.bank_line,
             margin: EdgeInsets.zero,
             onTap: () {
-              if (user!.kyc < 2) {
-                context.pushNamed("kyc");
-                return;
-              }
+              // if (user!.kyc < 2) {
+              //   context.pushNamed("kyc");
+              //   return;
+              // }
               final List<Map<String, String>> account = [
                 {
                   'account number': accounts![2].accountNumber.toString(),
