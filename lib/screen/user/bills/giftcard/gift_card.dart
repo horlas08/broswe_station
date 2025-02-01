@@ -609,7 +609,7 @@ class GiftCard extends HookWidget {
               press: enableButton.value && selectedCountry.value != ''
                   ? () {
                       final Map<String, String> data = {
-                        "country": countryController.text,
+                        "country": selectedCountry.value!.isoName!,
                         "productid":
                             selectedProduct.value!.productId!.toString(),
                         "quantity": quantityController.text,
