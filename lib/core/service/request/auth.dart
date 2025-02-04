@@ -25,6 +25,7 @@ Future<Response> registerRequest({
   required String phone,
   required String password,
   required String code,
+  String? ref_code,
 }) async {
   final res = await dio.post(signUpPath, data: {
     'firstName': firstName,
@@ -34,6 +35,7 @@ Future<Response> registerRequest({
     'phonenumber': phone,
     'password': password,
     'code': code,
+    'ref_code': ref_code,
   });
 
   return res;

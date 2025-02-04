@@ -45,6 +45,7 @@ class Register extends HookWidget {
     final usernameController = useTextEditingController();
     final verificationFieldController = useTextEditingController();
     final confirmPasswordController = useTextEditingController();
+    final refController = useTextEditingController();
 
     final enableButton = useState<bool>(false);
     final checkButton = useState<bool>(false);
@@ -303,6 +304,10 @@ class Register extends HookWidget {
                               controller: confirmPasswordController,
                               isPassword: true,
                             ),
+                            CustomInput(
+                              labelText: "Referral Code",
+                              controller: refController,
+                            ),
                             const SizedBox(
                               height: 20,
                             ),
@@ -336,7 +341,7 @@ class Register extends HookWidget {
                                         ),
                                         WidgetSpan(
                                           child: Text(
-                                            " privacy and policy",
+                                            "privacy and policy",
                                             style: TextStyle(
                                               color: AppColor.primaryColor,
                                             ),
@@ -379,6 +384,7 @@ class Register extends HookWidget {
                                                 code:
                                                     verificationFieldController
                                                         .text,
+                                                ref_code: refController.text,
                                               ),
                                             );
                                       } else {

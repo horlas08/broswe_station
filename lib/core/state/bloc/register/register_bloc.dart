@@ -34,6 +34,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         phone: event.phone,
         email: event.email,
         code: event.code,
+        ref_code: event.ref_code,
       );
 
       // if (res == null) {

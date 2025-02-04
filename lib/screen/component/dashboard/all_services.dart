@@ -70,7 +70,7 @@ class AllServices extends HookWidget {
     final List<Map<String, dynamic>> allServices2 = [
       {
         "icon": Platform.isIOS ? Ionicons.school : Ionicons.logo_bitcoin,
-        "name": Platform.isIOS ? "Sell Crypto" : "Education",
+        "name": Platform.isIOS ? "Education" : "Sell Crypto",
         "route": Platform.isIOS
             ? '/education'
             : (user.kyc > 1 ? "/crypto" : "/user/kyc")
