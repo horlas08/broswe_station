@@ -5,6 +5,8 @@ import 'package:browse_station/screen/component/dashboard/dashboard_header.dart'
 import 'package:browse_station/screen/component/dashboard/transaction.dart';
 import 'package:flutter/material.dart';
 
+import '../referral/ref_design.dart';
+
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
 
@@ -27,6 +29,10 @@ class Dashboard extends StatelessWidget {
                   height: 50,
                 ),
                 AllServices(),
+                SizedBox(
+                  height: 30,
+                ),
+                RefDesign(),
                 SizedBox(
                   height: 50,
                 ),

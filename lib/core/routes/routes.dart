@@ -35,6 +35,7 @@ import '../../screen/user/bills/data/data.dart';
 import '../../screen/user/confirm_page/validate_transaction.dart';
 import '../../screen/user/dashboard/dashboard.dart';
 import '../../screen/user/kyc/kyc.dart';
+import '../../screen/user/referral/referral.dart';
 import '../../screen/user/shell/portraitcuts/portraitcuts.dart';
 import '../../screen/user/verify/login_verify.dart';
 import '../../screen/user/withdraw/withdraw.dart';
@@ -399,6 +400,13 @@ class AppRouter {
         },
         redirect: (context, state) async {
           return null;
+        },
+      ),
+      GoRoute(
+        path: '/referral',
+        name: 'referral',
+        builder: (context, state) {
+          return const Referral();
         },
       ),
       GoRoute(

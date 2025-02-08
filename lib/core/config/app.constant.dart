@@ -17,6 +17,7 @@ const String validatePin = '/verifypin';
 const String getDataPlan = '/services/network-avaliability';
 const String buyData = '/services/data-app';
 const String buyAirtime = '/services/airtime';
+const String postWithdrawal = '/services/withdrawal';
 // const String buyAirtime = '/airtime-test';
 const String upgradeToAgent = '/upgradetoagent';
 const String manualFunding = '/manualfunding';

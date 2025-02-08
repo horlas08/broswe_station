@@ -35,7 +35,7 @@ Future<Response> registerRequest({
     'phonenumber': phone,
     'password': password,
     'code': code,
-    'ref_code': ref_code,
+    'invite_code': ref_code,
   });
 
   return res;
