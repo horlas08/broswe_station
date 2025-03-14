@@ -21,10 +21,14 @@ class LoginVerifyFailed extends LoginVerifyState {
 class LoginVerifySuccess extends LoginVerifyState {
   final Map<String, dynamic> userData;
   final List<Map<String, dynamic>> accounts;
+  final Map<String, String> settings;
+  final Map<String, dynamic> alt_notification;
 
   LoginVerifySuccess({
     required this.userData,
     required this.accounts,
+    required this.settings,
+    required this.alt_notification,
   });
 }
 

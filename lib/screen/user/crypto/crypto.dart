@@ -82,8 +82,6 @@ class Crypto extends HookWidget {
                     } else {
                       print('empty');
                     }
-                    print("________");
-                    print(res.value);
                   } catch (error) {
                     print(error);
                   }

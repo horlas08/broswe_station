@@ -3,14 +3,17 @@ import 'dart:ui';
 class AppConfig {
   bool authState;
   bool pinState;
+  bool showOverlayNotify;
   bool enableFingerPrint;
   bool enableNotification;
   bool enableShakeToHideBalance;
   String themeMode = 'light';
   bool autoTheme = false;
+
   AppConfig({
     required this.authState,
     required this.pinState,
+    required this.showOverlayNotify,
     required this.themeMode,
     required this.enableFingerPrint,
     required this.enableNotification,
@@ -21,6 +24,7 @@ class AppConfig {
   AppConfig copyWith({
     bool? authState,
     bool? pinState,
+    bool? showOverlayNotify,
     bool? enableFingerPrint,
     bool? enableNotification,
     bool? enableShakeToHideBalance,
@@ -31,6 +35,7 @@ class AppConfig {
     return AppConfig(
       authState: authState ?? this.authState,
       pinState: pinState ?? this.pinState,
+      showOverlayNotify: showOverlayNotify ?? this.showOverlayNotify,
       enableFingerPrint: enableFingerPrint ?? this.enableFingerPrint,
       enableNotification: enableNotification ?? this.enableNotification,
       enableShakeToHideBalance:
@@ -48,6 +53,7 @@ class AppConfig {
   factory AppConfig.fromJson(Map<String, dynamic> json) {
     return AppConfig(
       authState: false,
+      showOverlayNotify: true,
       pinState: json['pinState'] as bool,
       enableNotification: json['enableNotification'] as bool,
       enableFingerPrint: json['enableFingerPrint'] as bool,
@@ -61,6 +67,7 @@ class AppConfig {
     return {
       'authState': authState,
       'pinState': pinState,
+      'showOverlayNotify': showOverlayNotify,
       'themeMode': themeMode,
       'enableNotification': enableNotification,
       'enableFingerPrint': enableFingerPrint,

@@ -72,8 +72,14 @@ class UpdateProfile extends HookWidget {
             }
 
             if (res?.statusCode == HttpStatus.ok && context.mounted) {
+              final userData = res?.data['data']['user_data'];
+              final alt_notification = res?.data['data']['alt_notification'];
+              userData.addAll({"alt_notification": alt_notification});
               context.read<AppBloc>().add(
-                  UpdateUserEvent(userData: res?.data['data']['user_data']));
+                    UpdateUserEvent(
+                      userData: userData,
+                    ),
+                  );
 
               context.loaderOverlay.hide();
 
@@ -249,8 +255,18 @@ class UpdateProfile extends HookWidget {
 
                           if (res?.statusCode == HttpStatus.ok &&
                               context.mounted) {
-                            context.read<AppBloc>().add(UpdateUserEvent(
-                                userData: res?.data['data']['user_data']));
+                            final userData = res?.data['data']['user_data'];
+                            final alt_notification =
+                                res?.data['data']['alt_notification'];
+                            userData
+                                .addAll({"alt_notification": alt_notification});
+                            context.read<AppBloc>().add(
+                                  UpdateUserEvent(
+                                    userData: userData,
+                                  ),
+                                );
+                            // context.read<AppBloc>().add(UpdateUserEvent(
+                            //     userData: res?.data['data']['user_data']));
                             context.loaderOverlay.hide();
 
                             showToast(context,

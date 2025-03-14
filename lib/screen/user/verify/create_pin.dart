@@ -50,11 +50,15 @@ class CreatePin extends HookWidget {
         } else if (state is LoginVerifySuccess) {
           context.loaderOverlay.hide();
           context.read<AppConfigCubit>().changeAuthState(true);
-          context.read<AppBloc>().add(AddUserEvent(userData: state.userData));
+          final userData = state.userData;
+          userData.addAll({"alt_notification": state.alt_notification});
+          context.read<AppBloc>().add(AddUserEvent(userData: userData));
           context
               .read<AppBloc>()
               .add(AddAccountEvent(accounts: state.accounts));
-
+          context
+              .read<AppBloc>()
+              .add(AddUserSettingsEvent(settings: state.settings));
           context.go('/user');
         }
       },

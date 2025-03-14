@@ -2,7 +2,9 @@
 class Assets {
   Assets._();
 
+  static const String assetsImagesNews = 'assets/images/news.png';
   static const String assetsLottieSuccess = 'assets/lottie/success.lottie';
+  static const String browseStationShorebird = 'shorebird.yaml';
   static const String cableDstv = 'assets/images/cable/dstv.png';
   static const String cableGotv = 'assets/images/cable/gotv.png';
   static const String cableStartimes = 'assets/images/cable/startimes.png';
@@ -18,6 +20,7 @@ class Assets {
   static const String imagesAppDashboard = 'assets/images/app-dashboard.jpg';
   static const String imagesBoxBg = 'assets/images/box_bg.png';
   static const String imagesFavicon = 'assets/images/favicon.png';
+  static const String imagesNews = 'assets/images/news.jpg';
   static const String imagesProfilePicture =
       'assets/images/profile-picture.png';
   static const String lottieSuccess = 'assets/lottie/success.json';

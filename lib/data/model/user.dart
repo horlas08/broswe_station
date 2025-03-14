@@ -9,8 +9,10 @@ class User extends Equatable {
   final String apiKey;
   final num balance;
   final num kyc;
+  final num commission;
   final String phoneNumber;
   final String? photo;
+  final Map<String, dynamic>? alt_notification;
   final bool? b2fa;
   final bool? hasPin;
   final bool? isVerified;
@@ -24,6 +26,7 @@ class User extends Equatable {
     this.id,
     required this.phoneNumber,
     this.photo,
+    this.alt_notification,
     required this.firstName,
     required this.lastName,
     required this.username,
@@ -31,6 +34,7 @@ class User extends Equatable {
     required this.apiKey,
     required this.kyc,
     required this.balance,
+    required this.commission,
     this.b2fa,
     this.hasPin,
     this.isVerified,
@@ -43,7 +47,7 @@ class User extends Equatable {
 
   @override
   String toString() {
-    return 'User{id: $id, kyc: $kyc, firstName: $firstName, lastName: $lastName, username: $username, email: $email, balance: $balance, b2fa: $b2fa, has_pin: $hasPin, is_verified: $isVerified, phone: $phoneNumber, photo: $photo}';
+    return 'User{id: $id, kyc: $kyc, firstName: $firstName, lastName: $lastName, username: $username, email: $email, balance: $balance, b2fa: $b2fa, has_pin: $hasPin, is_verified: $isVerified, phone: $phoneNumber, photo: $photo,}';
   }
 
   User copyWith({
@@ -53,6 +57,7 @@ class User extends Equatable {
     String? username,
     String? email,
     String? apiKey,
+    Map<String, dynamic>? alt_notification,
     String? phoneNumber,
     String? photo,
     num? balance,
@@ -73,8 +78,10 @@ class User extends Equatable {
       username: username ?? this.username,
       email: email ?? this.email,
       apiKey: apiKey ?? this.apiKey,
+      alt_notification: alt_notification ?? this.alt_notification,
       balance: balance ?? this.balance,
       kyc: kyc ?? this.kyc,
+      commission: kyc ?? this.commission,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       photo: photo ?? this.photo,
       b2fa: b2fa ?? this.b2fa,
@@ -99,6 +106,7 @@ class User extends Equatable {
       'balance': balance,
       'kyc': kyc,
       'photo': photo,
+      'alt_notification': alt_notification,
       'phoneNumber': phoneNumber,
       'b2fa': b2fa,
       'hasPin': hasPin,
@@ -120,6 +128,8 @@ class User extends Equatable {
       email: map['email'] as String,
       apiKey: map['api_key'] as String,
       balance: map['balance'] as num,
+      commission: map['commission'] as num,
+      alt_notification: map['alt_notification'] as Map<String, dynamic>,
       kyc: map['kyc'] as num,
       phoneNumber: map['phone_number'],
       photo: map['photo'],
@@ -154,6 +164,7 @@ class User extends Equatable {
         hasMonnify,
         userType,
         refBal,
-        referrals
+        referrals,
+        // alt_notification,
       ];
 }

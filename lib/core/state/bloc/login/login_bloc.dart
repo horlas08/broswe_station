@@ -41,11 +41,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         final accounts = (res.data['data']['accounts'] as List)
             .map((itemWord) => itemWord as Map<String, dynamic>)
             .toList();
+        final alt_notification =
+            Map<String, dynamic>.from(res.data['data']['alt_notification']);
+        final settings = Map<String, String>.from(res.data['data']['settings']);
         appBox.put("hasPin", res.data['data']['user_data']['has_pin']);
-        return emit(state.success(
-          res.data['data']['user_data'],
-          accounts,
-        ));
+        return emit(
+          state.success(
+            res.data['data']['user_data'],
+            accounts,
+            settings,
+            alt_notification,
+          ),
+        );
       } else {
         print("filed here");
         return emit(

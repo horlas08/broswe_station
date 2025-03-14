@@ -21,6 +21,7 @@ final _formKey = GlobalKey<FormState>();
 
 class ForgetPassword extends HookWidget {
   final String email;
+
   const ForgetPassword({super.key, required this.email});
 
   @override
@@ -80,12 +81,11 @@ class ForgetPassword extends HookWidget {
                     child: Column(
                       children: [
                         CustomInput(
-                          labelText: "Email Address",
+                          labelText: "Email Address/Username",
                           needLabel: true,
                           readOnly: true,
                           isEnable: false,
-                          validator:
-                              ValidationBuilder().email().maxLength(50).build(),
+                          validator: ValidationBuilder().maxLength(50).build(),
                           controller: useTextEditingController(text: email),
                           hintText: 'qozeem@gmail.com',
                         ),

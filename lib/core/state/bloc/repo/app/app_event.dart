@@ -25,3 +25,9 @@ class AddAccountEvent extends AppEvent {
     required this.accounts,
   });
 }
+
+class AddUserSettingsEvent extends AppEvent {
+  final Map<String, String> settings;
+
+  AddUserSettingsEvent({required this.settings});
+}

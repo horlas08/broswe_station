@@ -8,6 +8,7 @@ class AppConfigCubit extends HydratedCubit<AppConfig> {
       : super(AppConfig(
           authState: false,
           pinState: false,
+          showOverlayNotify: true,
           themeMode: 'light',
           enableFingerPrint: true,
           enableNotification: true,
@@ -32,6 +33,10 @@ class AppConfigCubit extends HydratedCubit<AppConfig> {
 
   changeThemeMode(String mode) async {
     emit(state.copyWith(themeMode: mode));
+  }
+
+  changeShowOverlayNotifyMode(bool mode) async {
+    emit(state.copyWith(showOverlayNotify: mode));
   }
 
   changeAutoThemeMode(bool mode) async {

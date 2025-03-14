@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:browse_station/core/config/color.constant.dart';
+import 'package:browse_station/data/model/user.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,26 @@ import 'package:touchable_opacity/touchable_opacity.dart';
 import '../config/app.constant.dart';
 import '../config/font.constant.dart';
 import '../service/http.dart';
+
+String getCommissionHelperByNetwork(String network, User user) {
+  if (network.contains("mtn")) {
+    return user.userType
+        ? "airtime_agent_off_percentage_mtn"
+        : "airtime_off_percentage_mtn";
+  } else if (network.contains("glo")) {
+    return user.userType
+        ? "airtime_agent_off_percentage_glo"
+        : "airtime_off_percentage_glo";
+  } else if (network.contains("airtel")) {
+    return user.userType
+        ? "airtime_agent_off_percentage_airtel"
+        : "airtime_off_percentage_airtel";
+  } else {
+    return user.userType
+        ? "airtime_agent_off_percentage_9mobile"
+        : "airtime_off_percentage_9mobile";
+  }
+}
 
 void showToast(
   BuildContext context, {

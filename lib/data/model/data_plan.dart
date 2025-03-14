@@ -4,9 +4,20 @@ class DataPlan {
   String? validity;
   String? amount;
   String? amount_agent;
+  String? cashback_agent;
+  String? cashback_user;
   String? type;
 
-  DataPlan({this.id, this.plan, this.validity, this.amount, this.type, this.amount_agent});
+  DataPlan({
+    this.id,
+    this.plan,
+    this.validity,
+    this.amount,
+    this.type,
+    this.amount_agent,
+    this.cashback_user,
+    this.cashback_agent,
+  });
 
   DataPlan.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -14,6 +25,8 @@ class DataPlan {
     validity = json['validity'];
     amount = json['amount'];
     amount_agent = json['amount_agent'];
+    cashback_agent = json['cashback_agent'];
+    cashback_user = json['cashback_user'];
     type = json['type'];
   }
 
@@ -25,6 +38,8 @@ class DataPlan {
     data['amount'] = this.amount;
     data['amount_agent'] = this.amount_agent;
     data['type'] = this.type;
+    data['cashback_user'] = this.cashback_user;
+    data['cashback_agent'] = this.cashback_agent;
     return data;
   }
 
@@ -44,6 +59,8 @@ class DataPlan {
       'validity': this.validity,
       'amount': this.amount,
       'amount_agent': this.amount_agent,
+      'cashback_agent': this.cashback_agent,
+      'cashback_user': this.cashback_user,
       'type': this.type,
     };
   }
@@ -54,7 +71,9 @@ class DataPlan {
       plan: map['plan'] as String,
       validity: map['validity'] as String,
       amount: map['amount'] as String,
-      amount_agent: map['amount_agent'] ,
+      amount_agent: map['amount_agent'],
+      cashback_user: map['cashback_user'],
+      cashback_agent: map['cashback_agent'],
       type: map['type'] as String,
     );
   }

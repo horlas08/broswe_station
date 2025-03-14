@@ -106,9 +106,9 @@ class Register extends HookWidget {
           );
 
           if (context.mounted) {
-            // context.read<AppConfigCubit>().changeOnboardStatus(true);
-            print(state.userData);
-            context.read<AppBloc>().add(AddUserEvent(userData: state.userData));
+            final userData = state.userData;
+            userData.addAll({"alt_notification": state.alt_notification});
+            context.read<AppBloc>().add(AddUserEvent(userData: userData));
 
             context
                 .read<AppBloc>()

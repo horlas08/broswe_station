@@ -10,7 +10,7 @@ import 'package:browse_station/data/model/portraitcuts.dart';
 import 'package:browse_station/data/model/product.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -61,6 +61,7 @@ Future<Response> buyAirtimeRequest(
   required String network,
   required String trx_id,
   required String airtime_type,
+  // required String promocode,
 }) async {
   final res = await dio.post(
     buyAirtime,
@@ -69,7 +70,8 @@ Future<Response> buyAirtimeRequest(
       "phone": phone,
       "trx_id": trx_id,
       "airtime_type": airtime_type,
-      "network_id": getNetworkIdByName(network: network)
+      "network_id": getNetworkIdByName(network: network),
+      // "promocode": promocode,
     },
     options: Options(
       headers: {
@@ -155,9 +157,12 @@ Future<List<CablePlan>> getCablePlanRequest(
         network: selectedNetwork,
       ),
     },
-    options: Options(headers: {
-      'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
-    }, extra: cacheOptions.toExtra()),
+    options: Options(
+      headers: {
+        'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
+      },
+      extra: cacheOptions.toExtra(),
+    ),
   );
   if (context.mounted) {
     context.loaderOverlay.hide();
@@ -200,6 +205,7 @@ Future<Response> buyDataRequest(
   required String trx_id,
   required String data_type,
   required String network_id,
+  required String promocode,
 }) async {
   var appBox = Hive.box('appBox');
   final res = await dio.get(
@@ -209,7 +215,8 @@ Future<Response> buyDataRequest(
       "phone": phone, //phone,
       "trx_id": trx_id,
       "data_type": data_type,
-      "network_id": int.parse(network_id)
+      "network_id": int.parse(network_id),
+      "promocode": 'promocode'
     },
     options: Options(
       headers: {
@@ -677,6 +684,54 @@ Future<Response> changePinRequest(
   return res;
 }
 
+Future<Response> validatePromoCode(
+  BuildContext context, {
+  required String code,
+}) async {
+  var appBox = Hive.box("appBox");
+  final cacheStore = MemCacheStore();
+  final cacheOptions = CacheOptions(
+      policy: CachePolicy.noCache, store: cacheStore, maxStale: Durations.short1
+      // Do not cache this request
+      );
+  final res = await dio.post(
+    "${verifyPromoCode}?promocode=${code}",
+    // data: {
+    //   "promocode": code,
+    //   // "token": appBox.get('token'),
+    // },
+    options: Options(
+      headers: {
+        'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}",
+      },
+      extra: cacheOptions.toExtra(),
+    ),
+  );
+  print("_______");
+  print(res.statusCode);
+  print("_______");
+  return res;
+}
+
+Future<Response> commissionWithdrawRequest(BuildContext context,
+    {required String amount}) async {
+  var appBox = Hive.box("appBox");
+  final res = await dio.post(
+    commissionWithdrawal,
+    data: {
+      "amount": amount,
+      "token": appBox.get('token'),
+    },
+    options: Options(
+      headers: {
+        'Authorization': "Bearer ${context.read<AppBloc>().state.user?.apiKey}"
+      },
+    ),
+  );
+
+  return res;
+}
+
 handleUpgrade(BuildContext context) async {
   context.loaderOverlay.show();
   var appBox = Hive.box('appBox');
@@ -691,9 +746,14 @@ handleUpgrade(BuildContext context) async {
     final response = await refreshUSerDetail();
 
     if (response?.statusCode == HttpStatus.ok && context.mounted) {
-      context
-          .read<AppBloc>()
-          .add(UpdateUserEvent(userData: response?.data['data']['user_data']));
+      final userData = response?.data['data']['user_data'];
+      final alt_notification = response?.data['data']['alt_notification'];
+      userData.addAll({"alt_notification": alt_notification});
+      context.read<AppBloc>().add(
+            UpdateUserEvent(
+              userData: userData,
+            ),
+          );
 
       context.loaderOverlay.hide();
       showToast(context,
@@ -717,9 +777,14 @@ refreshUserDetails(BuildContext context, {bool showLoading = true}) async {
   try {
     final response = await refreshUSerDetail();
     if (response?.statusCode == HttpStatus.ok && context.mounted) {
-      context
-          .read<AppBloc>()
-          .add(UpdateUserEvent(userData: response?.data['data']['user_data']));
+      final userData = response?.data['data']['user_data'];
+      final alt_notification = response?.data['data']['alt_notification'];
+      userData.addAll({"alt_notification": alt_notification});
+      context.read<AppBloc>().add(
+            UpdateUserEvent(
+              userData: userData,
+            ),
+          );
 
       if (showLoading) context.loaderOverlay.hide();
       if (showLoading) {
@@ -850,8 +915,14 @@ Future handleKycRequest(
       final response = await refreshUSerDetail();
 
       if (response?.statusCode == HttpStatus.ok && context.mounted) {
+        final userData = response?.data['data']['user_data'];
+        final alt_notification = response?.data['data']['alt_notification'];
+        userData.addAll({"alt_notification": alt_notification});
         context.read<AppBloc>().add(
-            UpdateUserEvent(userData: response?.data['data']['user_data']));
+              UpdateUserEvent(
+                userData: userData,
+              ),
+            );
 
         context
             .read<AppBloc>()

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:browse_station/core/helper/helper.dart';
 import 'package:browse_station/core/service/request/protected.dart';
@@ -5,14 +7,18 @@ import 'package:browse_station/data/model/data_plan.dart';
 import 'package:browse_station/screen/component/app_header2.dart';
 import 'package:browse_station/screen/component/custom_input.dart';
 import 'package:browse_station/screen/component/custom_scaffold.dart';
+import 'package:dio/dio.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_native_contact_picker/flutter_native_contact_picker.dart';
+import 'package:form_validator/form_validator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:phone_form_field/phone_form_field.dart';
+import 'package:toastification/toastification.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
 import '../../../../core/config/color.constant.dart';
@@ -45,7 +51,7 @@ class Data extends HookWidget {
     final user = context.read<AppBloc>().state.user;
 
     final ValueNotifier<bool> enableButton = useState(false);
-
+    final ValueNotifier<bool> haveCoupon = useState(false);
     void _handleFormChange() {
       enableButton.value = _airtimeFormKey.currentState!.validate() ?? true;
     }
@@ -55,6 +61,14 @@ class Data extends HookWidget {
     final ValueNotifier<DataPlan?> selectedDataPlan = useState(null);
     final ValueNotifier<List<DataPlan>> dataPlans = useState([]);
     final ValueNotifier<bool> dataIsLoading = useState(false);
+    final TextEditingController commissionController =
+        useTextEditingController();
+    final TextEditingController promotionController =
+        useTextEditingController();
+    final Map<String, String> userSettings =
+        context.read<AppBloc>().state.settings!;
+    print(userSettings);
+
     useEffect(() {
       if (selectedNetwork.value != '') {
         getDataPlanRequest(context, selectedNetwork).then(
@@ -477,6 +491,180 @@ class Data extends HookWidget {
                 const SizedBox(
                   height: 20,
                 ),
+                if (selectedNetwork.value.isNotEmpty &&
+                    selectedDataPlan.value?.id != null)
+                  CustomInput(
+                    labelText: 'Commission',
+                    controller: commissionController
+                      ..value = TextEditingValue(
+                          text: user!.userType
+                              ? selectedDataPlan.value!.cashback_agent!
+                              : selectedDataPlan.value!.cashback_user!),
+                    hintText: "",
+                    readOnly: true,
+                    textInputType: const TextInputType.numberWithOptions(),
+                  ),
+                if (!user!.userType &&
+                    selectedNetwork.value.isNotEmpty &&
+                    selectedDataPlan.value?.id != null)
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "You can get up to ",
+                          style: TextStyle(
+                            color: AppColor.danger,
+                          ),
+                        ),
+                        TextSpan(
+                          text: "${selectedDataPlan.value!.cashback_agent!}NGN",
+                          style: TextStyle(
+                            color: AppColor.success,
+                          ),
+                        ),
+                        TextSpan(
+                          text: " as commission,",
+                          style: TextStyle(
+                            color: AppColor.danger,
+                          ),
+                        ),
+                        WidgetSpan(
+                          child: TouchableOpacity(
+                            onTap: () {
+                              context.pushNamed("agent");
+                            },
+                            child: Text(
+                              " click here",
+                              style: TextStyle(
+                                color: AppColor.blueColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        TextSpan(
+                          text: " to upgrade your account to agent account",
+                          style: TextStyle(
+                            color: AppColor.danger,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (!user!.userType &&
+                    selectedNetwork.value.isNotEmpty &&
+                    selectedDataPlan.value?.id != null)
+                  const SizedBox(
+                    height: 20,
+                  ),
+                Row(
+                  children: [
+                    Checkbox.adaptive(
+                      value: haveCoupon.value,
+                      tristate: false,
+                      fillColor: WidgetStatePropertyAll(Colors.white),
+                      checkColor: AppColor.primaryColor,
+                      onChanged: (value) => haveCoupon.value = value!,
+                      shape: CircleBorder(
+                        side: BorderSide(
+                          width: 1,
+                          color: AppColor.primaryColor,
+                          style: BorderStyle.solid,
+                        ),
+                      ),
+                      side: BorderSide(
+                        color: AppColor.primaryColor,
+                        width: 2,
+                        style: BorderStyle.solid,
+                      ),
+                    ),
+                    Text("Do you have a promo code ?"),
+                  ],
+                ),
+                if (haveCoupon.value)
+                  TouchableOpacity(
+                    onTap: () async {
+                      if (promotionController.text.isEmpty) {
+                        return showToast(
+                          context,
+                          title: "error",
+                          desc: "Please enter code to validate",
+                        );
+                      }
+                      try {
+                        context.loaderOverlay.show();
+                        final response = await validatePromoCode(
+                          context,
+                          code: promotionController.text,
+                        );
+
+                        if (!context.mounted) return;
+                        if (response.statusCode == HttpStatus.ok) {
+                          context.loaderOverlay.hide();
+                          return showToast(
+                            context,
+                            title: "success",
+                            desc: response.data['message'],
+                            type: ToastificationType.success,
+                          );
+                        } else {
+                          context.loaderOverlay.hide();
+                          throw new Exception(response.data['message']);
+                        }
+                      } on DioException catch (error) {
+                        context.loaderOverlay.hide();
+
+                        showToast(
+                          context,
+                          title: "error",
+                          desc: error.response?.data['message'],
+                        );
+                      } catch (error) {
+                        context.loaderOverlay.hide();
+                        showToast(
+                          context,
+                          title: "error",
+                          desc: error.toString(),
+                        );
+                      }
+                    },
+                    child: SizedBox(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 5,
+                            child: CustomInput(
+                              labelText: "Promo Code (optional)",
+                              controller: promotionController,
+                              validator: haveCoupon.value
+                                  ? ValidationBuilder().required().build()
+                                  : ValidationBuilder().build(),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: AppColor.primaryColor,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Icon(
+                                Icons.check,
+                                size: 24,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                 Button(
                   text: "Subscribe Now",
                   press: enableButton.value && selectedNetwork.value != ''
@@ -491,7 +679,10 @@ class Data extends HookWidget {
                             "trx_id": getTrx(),
                             "data_type": selectedDataType.value,
                             "network_id":
-                                "${getNetworkIdByName(network: selectedNetwork.value)}"
+                                "${getNetworkIdByName(network: selectedNetwork.value)}",
+                            "promocode": promotionController.text.isNotEmpty
+                                ? promotionController.text
+                                : ''
                           };
                           print(data);
                           // return;
@@ -502,7 +693,10 @@ class Data extends HookWidget {
                                 "${currency(context)}${amountController.text}",
                             "Validity": selectedDataPlan.value!.validity!,
                             "Plan": selectedDataPlan.value!.plan!,
-                            "Network": selectedNetwork.value
+                            "Network": selectedNetwork.value,
+                            "promo code": promotionController.text.isNotEmpty
+                                ? promotionController.text
+                                : 'No Code'
                           };
                           context.push(
                             '/confirm/transaction',

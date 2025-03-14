@@ -11,7 +11,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AddUserEvent>(_addUser);
     on<UpdateUserEvent>(_updateUser);
     on<AddAccountEvent>(_addAccount);
+    on<AddUserSettingsEvent>(_addUserSettings);
   }
+
   @override
   void onChange(Change<AppState> change) {
     print(change.currentState.toString());
@@ -33,6 +35,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
     state.accounts = allAccount;
     emit(state);
+  }
+
+  void _addUserSettings(
+      AddUserSettingsEvent event, Emitter<AppState> emit) async {
+    final newState = state.copyWith(settings: event.settings);
+    // state.settings = {...event.settings};
+    emit(newState);
   }
 
   void _updateUser(UpdateUserEvent event, Emitter<AppState> emit) async {

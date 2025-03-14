@@ -13,6 +13,7 @@ import 'package:phone_form_field/phone_form_field.dart';
 import 'package:touchable_opacity/touchable_opacity.dart';
 
 import '../../../../core/config/color.constant.dart';
+import '../../../../core/state/bloc/repo/app/app_bloc.dart';
 import '../../../../core/state/cubic/app_config_cubit.dart';
 import '../../../../data/model/app_config.dart';
 import '../../../component/button.dart';
@@ -33,7 +34,14 @@ class Airtime extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController amountController = useTextEditingController();
-
+    final TextEditingController commissionController =
+        useTextEditingController();
+    final TextEditingController promotionController =
+        useTextEditingController();
+    final Map<String, String> userSettings =
+        context.read<AppBloc>().state.settings!;
+    print(userSettings);
+    final user = context.read<AppBloc>().state.user!;
     useEffect(() {
       // amountController.text = '22';
       // phoneController.value =
@@ -41,6 +49,7 @@ class Airtime extends HookWidget {
       return null;
     }, []);
     final ValueNotifier<bool> enableButton = useState(false);
+    final ValueNotifier<bool> haveCoupon = useState(false);
 
     void _handleFormChange() {
       enableButton.value = _airtimeFormKey.currentState!.validate() ?? true;
@@ -121,6 +130,174 @@ class Airtime extends HookWidget {
                 const SizedBox(
                   height: 20,
                 ),
+                if (selectedPlan.value.isNotEmpty)
+                  CustomInput(
+                    labelText: 'Commission',
+                    controller: commissionController
+                      ..value = TextEditingValue(
+                          text: userSettings[getCommissionHelperByNetwork(
+                              selectedPlan.value, user)]!),
+                    hintText: "",
+                    readOnly: true,
+                    textInputType: const TextInputType.numberWithOptions(),
+                  ),
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "You can get up to",
+                        style: TextStyle(
+                          color: AppColor.danger,
+                        ),
+                      ),
+                      TextSpan(
+                        text: userSettings[getCommissionHelperByNetwork(
+                            selectedPlan.value, user)]!,
+                        style: TextStyle(
+                          color: AppColor.success,
+                        ),
+                      ),
+                      TextSpan(
+                        text: " as commission,",
+                        style: TextStyle(
+                          color: AppColor.danger,
+                        ),
+                      ),
+                      WidgetSpan(
+                        child: TouchableOpacity(
+                          onTap: () {
+                            context.pushNamed("agent");
+                          },
+                          child: Text(
+                            " click here",
+                            style: TextStyle(
+                              color: AppColor.blueColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      TextSpan(
+                        text: " to upgrade your account to agent account",
+                        style: TextStyle(
+                          color: AppColor.danger,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                // Row(
+                //   children: [
+                //     Checkbox.adaptive(
+                //       value: haveCoupon.value,
+                //       tristate: false,
+                //       fillColor: WidgetStatePropertyAll(Colors.white),
+                //       checkColor: AppColor.primaryColor,
+                //       onChanged: (value) => haveCoupon.value = value!,
+                //       shape: CircleBorder(
+                //         side: BorderSide(
+                //           width: 1,
+                //           color: AppColor.primaryColor,
+                //           style: BorderStyle.solid,
+                //         ),
+                //       ),
+                //       side: BorderSide(
+                //         color: AppColor.primaryColor,
+                //         width: 2,
+                //         style: BorderStyle.solid,
+                //       ),
+                //     ),
+                //     Text("Do you have a promo code ?"),
+                //   ],
+                // ),
+                // if (haveCoupon.value)
+                //   TouchableOpacity(
+                //     onTap: () async {
+                //       if (promotionController.text.isEmpty) {
+                //         return showToast(
+                //           context,
+                //           title: "error",
+                //           desc: "Please enter code to validate",
+                //         );
+                //       }
+                //       try {
+                //         context.loaderOverlay.show();
+                //         final response = await validatePromoCode(
+                //           context,
+                //           code: promotionController.text,
+                //         );
+                //         if (!context.mounted) return;
+                //         if (response.statusCode == HttpStatus.ok) {
+                //           context.loaderOverlay.hide();
+                //           return showToast(
+                //             context,
+                //             title: "success",
+                //             desc: response.data['message'],
+                //             type: ToastificationType.success,
+                //           );
+                //         } else {
+                //           context.loaderOverlay.hide();
+                //           throw new Exception(response.data['message']);
+                //         }
+                //       } on DioException catch (error) {
+                //         context.loaderOverlay.hide();
+                //         showToast(
+                //           context,
+                //           title: "success",
+                //           desc: error.response?.data['message'],
+                //         );
+                //       } catch (error) {
+                //         context.loaderOverlay.hide();
+                //         showToast(
+                //           context,
+                //           title: "success",
+                //           desc: error.toString(),
+                //         );
+                //       }
+                //     },
+                //     child: SizedBox(
+                //       child: Row(
+                //         crossAxisAlignment: CrossAxisAlignment.center,
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: [
+                //           Expanded(
+                //             flex: 5,
+                //             child: CustomInput(
+                //               labelText: "Promo Code (optional)",
+                //               controller: promotionController,
+                //               validator: haveCoupon.value
+                //                   ? ValidationBuilder().required().build()
+                //                   : ValidationBuilder().build(),
+                //             ),
+                //           ),
+                //           SizedBox(
+                //             width: 15,
+                //           ),
+                //           Expanded(
+                //             flex: 1,
+                //             child: Container(
+                //               height: 60,
+                //               decoration: BoxDecoration(
+                //                 color: AppColor.primaryColor,
+                //                 borderRadius: BorderRadius.circular(20),
+                //               ),
+                //               child: Icon(
+                //                 Icons.check,
+                //                 size: 24,
+                //                 color: Colors.white,
+                //               ),
+                //             ),
+                //           )
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // const SizedBox(
+                //   height: 20,
+                // ),
                 Button(
                   text: "Recharge Now",
                   press: enableButton.value && selectedPlan.value != ''
@@ -132,14 +309,20 @@ class Airtime extends HookWidget {
                             "trx_id":
                                 "${DateTime.now().microsecondsSinceEpoch}",
                             "airtime_type": "vtu",
-                            "network": selectedPlan.value
+                            "network": selectedPlan.value,
+                            // "promocode": promotionController.text.isNotEmpty
+                            //     ? promotionController.text
+                            //     : ''
                           };
                           final Map<String, String> viewData = {
                             "Product Type": "Airtime",
                             "Phone Number": phone,
                             "Amount":
                                 "${currency(context)}${amountController.text}",
-                            "Network": selectedPlan.value
+                            "Network": selectedPlan.value,
+                            // "promo code": promotionController.text.isNotEmpty
+                            //     ? promotionController.text
+                            //     : 'No Code'
                           };
                           context.push(
                             '/confirm/transaction',

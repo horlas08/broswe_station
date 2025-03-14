@@ -55,7 +55,7 @@ Future<void> configureDio() async {
     store: cacheStore,
     policy: CachePolicy.forceCache,
     priority: CachePriority.normal,
-    maxStale: const Duration(minutes: 1),
+    maxStale: const Duration(seconds: 5),
     hitCacheOnErrorExcept: [401, 404],
     keyBuilder: (request) {
       return request.uri.toString();
@@ -76,7 +76,7 @@ Future<void> configureDio() async {
       return handler.next(options);
     },
   ));
-  dio.interceptors.add(DioCacheInterceptor(options: customCacheOptions));
+  // dio.interceptors.add(DioCacheInterceptor(options: customCacheOptions));
   // petty log
   dio.interceptors.add(PrettyDioLogger(
       requestHeader: true,

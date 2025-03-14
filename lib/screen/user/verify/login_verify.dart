@@ -86,20 +86,41 @@ class LoginVerify extends HookWidget {
           context.loaderOverlay.hide();
           showToast(context, title: "Verification Error", desc: state.message);
         } else if (state is LoginVerifySuccess) {
-          context.loaderOverlay.hide();
-          context.read<AppConfigCubit>().changeAuthState(true);
-          context.read<AppBloc>().add(AddUserEvent(userData: state.userData));
-          context
-              .read<AppBloc>()
-              .add(AddAccountEvent(accounts: state.accounts));
+          try {
+            context.loaderOverlay.hide();
+            context.read<AppConfigCubit>().changeAuthState(true);
+            final userData = state.userData;
 
-          context.go('/user');
-          showToast(
-            context,
-            title: "Login Info",
-            desc: "Login Successful",
-            type: ToastificationType.success,
-          );
+            try {
+              userData.addAll({"alt_notification": state.alt_notification});
+              print("+++++++++");
+              print(state.alt_notification.runtimeType);
+              print(userData);
+            } catch (error) {
+              print(error);
+            }
+
+            print("_______");
+            context.read<AppBloc>().add(
+                  AddUserEvent(userData: userData),
+                );
+            context
+                .read<AppBloc>()
+                .add(AddUserSettingsEvent(settings: state.settings));
+            context
+                .read<AppBloc>()
+                .add(AddAccountEvent(accounts: state.accounts));
+
+            context.go('/user');
+            showToast(
+              context,
+              title: "Login Info",
+              desc: "Login Successful",
+              type: ToastificationType.success,
+            );
+          } catch (error) {
+            print(error);
+          }
         }
       },
       builder: (context, state) {

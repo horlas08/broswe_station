@@ -48,10 +48,15 @@ class Login extends HookWidget {
           context.loaderOverlay.hide();
           showToast(context, title: "Login Error", desc: state.message);
         } else if (state is LoginSuccess) {
-          context.read<AppBloc>().add(AddUserEvent(userData: state.userData));
+          final userData = state.userData;
+          userData.addAll({"alt_notification": state.alt_notification});
+          context.read<AppBloc>().add(AddUserEvent(userData: userData));
           context
               .read<AppBloc>()
               .add(AddAccountEvent(accounts: state.accounts));
+          context
+              .read<AppBloc>()
+              .add(AddUserSettingsEvent(settings: state.settings));
           // if (!context.read<AppConfigCubit>().state.onboardSkip) {
           //   context.read<AppConfigCubit>().changeOnboardStatus(true);
           // }

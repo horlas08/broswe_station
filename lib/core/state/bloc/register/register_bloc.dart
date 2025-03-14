@@ -51,9 +51,16 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           final accounts = (res.data['accounts'] as List)
               .map((itemWord) => itemWord as Map<String, dynamic>)
               .toList();
+          final alt_notification =
+              Map<String, dynamic>.from(res.data['data']['alt_notification']);
           emit(
-            state.success(res.data['message'], res.data['user_data']['email'],
-                res.data['user_data'], accounts),
+            state.success(
+              res.data['message'],
+              res.data['user_data']['email'],
+              res.data['user_data'],
+              accounts,
+              alt_notification,
+            ),
           );
         } catch (error) {
           print(error);
