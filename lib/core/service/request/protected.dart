@@ -71,7 +71,6 @@ Future<Response> buyAirtimeRequest(
       "trx_id": trx_id,
       "airtime_type": airtime_type,
       "network_id": getNetworkIdByName(network: network),
-      // "promocode": promocode,
     },
     options: Options(
       headers: {

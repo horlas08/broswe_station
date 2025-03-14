@@ -35,13 +35,19 @@ class Airtime extends HookWidget {
   Widget build(BuildContext context) {
     final TextEditingController amountController = useTextEditingController();
     final TextEditingController commissionController =
-        useTextEditingController();
+    useTextEditingController();
     final TextEditingController promotionController =
-        useTextEditingController();
+    useTextEditingController();
     final Map<String, String> userSettings =
-        context.read<AppBloc>().state.settings!;
+    context
+        .read<AppBloc>()
+        .state
+        .settings!;
     print(userSettings);
-    final user = context.read<AppBloc>().state.user!;
+    final user = context
+        .read<AppBloc>()
+        .state
+        .user!;
     useEffect(() {
       // amountController.text = '22';
       // phoneController.value =
@@ -58,7 +64,7 @@ class Airtime extends HookWidget {
     final ValueNotifier<String> selectedPlan = useState('');
 
     final FlutterNativeContactPicker _contactPicker =
-        FlutterNativeContactPicker();
+    FlutterNativeContactPicker();
 
     return BlocConsumer<AppConfigCubit, AppConfig>(
       listener: (context, state) {
@@ -158,7 +164,7 @@ class Airtime extends HookWidget {
                         ),
                       ),
                       TextSpan(
-                        text: " as commission,",
+                        text: "% as commission,",
                         style: TextStyle(
                           color: AppColor.danger,
                         ),
@@ -302,37 +308,39 @@ class Airtime extends HookWidget {
                   text: "Recharge Now",
                   press: enableButton.value && selectedPlan.value != ''
                       ? () {
-                          final phone = "0${phoneController.value.nsn}";
-                          final Map<String, String> data = {
-                            "amount": amountController.text,
-                            "phone": phone,
-                            "trx_id":
-                                "${DateTime.now().microsecondsSinceEpoch}",
-                            "airtime_type": "vtu",
-                            "network": selectedPlan.value,
-                            // "promocode": promotionController.text.isNotEmpty
-                            //     ? promotionController.text
-                            //     : ''
-                          };
-                          final Map<String, String> viewData = {
-                            "Product Type": "Airtime",
-                            "Phone Number": phone,
-                            "Amount":
-                                "${currency(context)}${amountController.text}",
-                            "Network": selectedPlan.value,
-                            // "promo code": promotionController.text.isNotEmpty
-                            //     ? promotionController.text
-                            //     : 'No Code'
-                          };
-                          context.push(
-                            '/confirm/transaction',
-                            extra: {
-                              'function': buyAirtimeRequest,
-                              'data': data,
-                              'viewData': viewData,
-                            },
-                          );
-                        }
+                    final phone = "0${phoneController.value.nsn}";
+                    final Map<String, String> data = {
+                      "amount": amountController.text,
+                      "phone": phone,
+                      "trx_id":
+                      "${DateTime
+                          .now()
+                          .microsecondsSinceEpoch}",
+                      "airtime_type": "vtu",
+                      "network": selectedPlan.value,
+                      // "promocode": promotionController.text.isNotEmpty
+                      //     ? promotionController.text
+                      //     : ''
+                    };
+                    final Map<String, String> viewData = {
+                      "Product Type": "Airtime",
+                      "Phone Number": phone,
+                      "Amount":
+                      "${currency(context)}${amountController.text}",
+                      "Network": selectedPlan.value,
+                      // "promo code": promotionController.text.isNotEmpty
+                      //     ? promotionController.text
+                      //     : 'No Code'
+                    };
+                    context.push(
+                      '/confirm/transaction',
+                      extra: {
+                        'function': buyAirtimeRequest,
+                        'data': data,
+                        'viewData': viewData,
+                      },
+                    );
+                  }
                       : null,
                 ),
               ],
@@ -344,10 +352,9 @@ class Airtime extends HookWidget {
   }
 }
 
-Widget NetworkCard(
-    {required String image,
-    required String name,
-    required ValueNotifier<String> selected}) {
+Widget NetworkCard({required String image,
+  required String name,
+  required ValueNotifier<String> selected}) {
   return TouchableOpacity(
     onTap: () {
       selected.value = name;
