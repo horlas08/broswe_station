@@ -98,7 +98,7 @@ Future<void> configureDio() async {
   dio.interceptors.add(RetryInterceptor(
     dio: dio,
     logPrint: print, // specify log function (optional)
-    retries: 1, // retry count (optional)
+    retries: 0, // retry count (optional)
     retryDelays: const [
       // set delays between retries (optional)
       // Duration(seconds: 1), // wait 1 sec before first retry
