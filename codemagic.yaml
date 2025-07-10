@@ -3,29 +3,74 @@ workflows:
     name: Shorebird Build (iOS Unsigned)
     max_build_duration: 60
     environment:
-      flutter: stable # Specify the Flutter channel (stable, beta, dev)
-      xcode: latest # Use the latest version of Xcode for iOS builds
+      flutter: "3.29.3" # Specify the Flutter channel (stable, beta, dev)
+      cocoapods: default
+      xcode: "16.2" # Use the latest version of Xcode for iOS builds
       groups:
         - broswestation # Reference the variable group
 
-
     scripts:
-      - name: Install Flutter and Shorebird CLI
+      - name: Install Flutter
         script: |
           flutter --version
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Install Shorebird CLI
+        script: |
           curl --proto '=https' --tlsv1.2 https://raw.githubusercontent.com/shorebirdtech/install/main/install.sh -sSf | bash
           export PATH="$HOME/.shorebird/bin:$PATH"  >> $CM_ENV
           echo $PATH
           shorebird --version
+      - name: CocoaPods Install
+        script: |
+          flutter clean
           flutter pub get
           cd ios
-          pod install
+          rm -rf Pods Podfile.lock
+          pod install --repo-update
           cd ..
+      - name: Shorebird Release
+        script: |
+          export PATH="$HOME/.shorebird/bin:$PATH"
           shorebird --version
-          shorebird release ios --no-codesign
+          shorebird release ios  --no-codesign
 
     artifacts:
       - build/ios/archive/*.xcarchive # Unsigned iOS IPA file
       # - shorebird/*.patch # Shorebird patch files
       # pod repo update
       # pod update Sentry/HybridSDK
+
+  android-release-build:
+    name: Android Release Build (signed)
+    max_build_duration: 60
+    environment:
+      flutter: "3.29.3"
+      groups:
+        - shorebird
+
+    scripts:
+      - name: Install Flutter
+        script: |
+          flutter --version
+          flutter pub get
+          flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Install Shorebird CLI
+        script: |
+          curl --proto '=https' --tlsv1.2 https://raw.githubusercontent.com/shorebirdtech/install/main/install.sh -sSf | bash
+          export PATH="$HOME/.shorebird/bin:$PATH"
+          shorebird --version
+
+      - name: Set up keystore
+        script: |
+          echo $CM_KEYSTORE | base64 --decode > $CM_KEYSTORE_PATH
+
+      - name: Shorebird Build Android (signed)
+        script: |
+          export PATH="$HOME/.shorebird/bin:$PATH"
+          shorebird release android
+          flutter build apk --split-per-abi
+
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
+      - build/app/outputs/bundle/release/*.aab

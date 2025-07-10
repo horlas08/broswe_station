@@ -62,5 +62,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>OneSignal_app_groups_key</key>
+	<string>group.com.browsestations.onesignal</string>
 </dict>
 </plist>
